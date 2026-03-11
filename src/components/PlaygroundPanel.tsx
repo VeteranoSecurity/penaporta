@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { X, PlayCircle, ShieldAlert, CheckCircle2, Loader2, Globe } from 'lucide-react';
+import { X, PlayCircle, ShieldAlert, CheckCircle2, Loader2, Globe, Terminal } from 'lucide-react';
 import type { Vulnerability } from '../data/mockData';
 
 interface PlaygroundPanelProps {
@@ -161,6 +161,112 @@ export function PlaygroundPanel({ vulnerability, onClose }: PlaygroundPanelProps
     );
   };
 
+  const renderSuccessView = () => {
+    if (vulnerability.id === 'cmdi-1' || vulnerability.id === 'cmdi-2') {
+      return (
+        <div className="flex-1 flex flex-col w-full h-full animate-in fade-in duration-500">
+          <div className="bg-[#111] border border-[#333] rounded-lg overflow-hidden flex flex-col w-full shadow-2xl">
+            <div className="bg-[#1a1a1a] border-b border-[#333] px-3 py-2 flex items-center justify-between">
+              <div className="flex gap-1.5">
+                <div className="w-3 h-3 rounded-full bg-red-500/80"></div>
+                <div className="w-3 h-3 rounded-full bg-yellow-500/80"></div>
+                <div className="w-3 h-3 rounded-full bg-green-500/80"></div>
+              </div>
+              <div className="flex items-center gap-2">
+                <Terminal size={14} className="text-gray-500" />
+                <span className="text-xs text-gray-400 font-mono">root@server:~</span>
+              </div>
+            </div>
+            <div className="p-4 bg-black font-mono text-sm text-[var(--color-lime-neon)] text-left overflow-y-auto whitespace-pre-wrap flex-1 max-h-[300px]">
+              <p className="mb-2 text-gray-400">$ {vulnerability.payload}</p>
+              root:x:0:0:root:/root:/bin/bash<br/>
+              daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin<br/>
+              bin:x:2:2:bin:/bin:/usr/sbin/nologin<br/>
+              sys:x:3:3:sys:/dev:/usr/sbin/nologin<br/>
+              sync:x:4:65534:sync:/bin:/bin/sync<br/>
+              games:x:5:60:games:/usr/games:/usr/sbin/nologin<br/>
+              man:x:6:12:man:/var/cache/man:/usr/sbin/nologin<br/>
+              www-data:x:33:33:www-data:/var/www:/usr/sbin/nologin
+            </div>
+          </div>
+          <button 
+            onClick={() => { setIsSuccess(false); setInputValue(''); }}
+            className="mt-6 text-sm text-[var(--color-cyan-neon)] hover:underline self-center"
+          >
+            Testar Novamente
+          </button>
+        </div>
+      );
+    }
+
+    if (vulnerability.id === 'cmdi-3') {
+      return (
+        <div className="flex-1 flex flex-col w-full h-full animate-in fade-in duration-500">
+          <div className="bg-[#0a0a0a] border border-purple-500/30 rounded-lg overflow-hidden flex flex-col w-full shadow-2xl">
+            <div className="bg-purple-900/20 border-b border-purple-500/30 px-3 py-2 flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Globe size={14} className="text-purple-400" />
+                <span className="text-xs text-purple-300 font-bold uppercase tracking-wider">OAST Listener</span>
+              </div>
+            </div>
+            <div className="p-4 bg-black font-mono text-sm text-gray-300 text-left overflow-y-auto w-full">
+              <div className="mb-4">
+                <p className="text-green-400 mb-1 font-bold">✓ DNS/HTTP Ping Recebido!</p>
+                <p className="text-xs text-gray-500">200 OK - burpcollaborator.net</p>
+              </div>
+              <div className="bg-[#111] border border-[#222] p-3 rounded overflow-hidden">
+                <span className="text-blue-400 break-all">GET</span> /www-data HTTP/1.1<br/>
+                Host: burpcollaborator.net<br/>
+                User-Agent: curl/7.81.0<br/>
+              </div>
+              <p className="mt-4 text-xs text-gray-400">
+                A execução do comando <span className="text-purple-400 whitespace-nowrap">`whoami`</span> forçou o servidor alvo a realizar uma requisição para a nossa URL com o próprio username da máquina (<span className="text-red-400">www-data</span>) de forma silenciosa.
+              </p>
+            </div>
+          </div>
+          <button 
+            onClick={() => { setIsSuccess(false); setInputValue(''); }}
+            className="mt-6 text-sm text-[var(--color-cyan-neon)] hover:underline self-center"
+          >
+            Testar Novamente
+          </button>
+        </div>
+      );
+    }
+
+    return (
+      <div className="flex-1 flex flex-col items-center justify-center text-center animate-in zoom-in-95 duration-500 space-y-4">
+         <div className="w-20 h-20 rounded-full bg-green-500/20 flex items-center justify-center mb-4">
+            <CheckCircle2 size={48} className="text-green-500 drop-shadow-[0_0_15px_rgba(34,197,94,0.8)]" />
+         </div>
+         
+         {vulnerability.id === 'sqli-2' ? (
+           <>
+             <h2 className="text-2xl font-bold text-green-400">Delay Detectado!</h2>
+             <p className="text-gray-400 text-sm max-w-[250px]">A requisição demorou os 5 segundos estipulados no SLEEP(). Logo, o banco de dados está vulnerável a Time-Based Blind.</p>
+           </>
+         ) : vulnerability.id === 'sqli-1' || vulnerability.id === 'sqli-3' ? (
+           <>
+             <h2 className="text-2xl font-bold text-green-400">Login Feito com Sucesso!</h2>
+             <p className="text-gray-400 text-sm max-w-[250px]">O ambiente vulnerável aceitou seu payload no banco de dados e o acesso como admin foi liberado.</p>
+           </>
+         ) : (
+           <>
+             <h2 className="text-2xl font-bold text-green-400">Payload Executado!</h2>
+             <p className="text-gray-400 text-sm max-w-[250px]">O ambiente executou a injeção com sucesso no processo alvo.</p>
+           </>
+         )}
+
+         <button 
+           onClick={() => { setIsSuccess(false); setInputValue(''); }}
+           className="mt-6 text-sm text-[var(--color-cyan-neon)] hover:underline"
+         >
+           Testar Novamente
+         </button>
+      </div>
+    );
+  };
+
   return (
     <aside className="w-full lg:w-96 flex-shrink-0 bg-[#050505] border-l md:border-l-0 lg:border-l lg:border-t-0 border-[#222] lg:h-[calc(100vh-80px)] lg:sticky lg:top-20 z-20 flex flex-col overflow-y-auto animate-in slide-in-from-right-8 duration-500">
       
@@ -197,39 +303,7 @@ export function PlaygroundPanel({ vulnerability, onClose }: PlaygroundPanelProps
           )}
         </div>
 
-        {isSuccess ? (
-          <div className="flex-1 flex flex-col items-center justify-center text-center animate-in zoom-in-95 duration-500 space-y-4">
-             <div className="w-20 h-20 rounded-full bg-green-500/20 flex items-center justify-center mb-4">
-                <CheckCircle2 size={48} className="text-green-500 drop-shadow-[0_0_15px_rgba(34,197,94,0.8)]" />
-             </div>
-             
-             {vulnerability.id === 'sqli-2' ? (
-               <>
-                 <h2 className="text-2xl font-bold text-green-400">Delay Detectado!</h2>
-                 <p className="text-gray-400 text-sm max-w-[250px]">A requisição demorou os 5 segundos estipulados no SLEEP(). Logo, o banco de dados está vulnerável a Time-Based Blind.</p>
-               </>
-             ) : vulnerability.id === 'sqli-1' || vulnerability.id === 'sqli-3' ? (
-               <>
-                 <h2 className="text-2xl font-bold text-green-400">Login Feito com Sucesso!</h2>
-                 <p className="text-gray-400 text-sm max-w-[250px]">O ambiente vulnerável aceitou seu payload no banco de dados e o acesso como admin foi liberado.</p>
-               </>
-             ) : (
-               <>
-                 <h2 className="text-2xl font-bold text-green-400">Payload Executado!</h2>
-                 <p className="text-gray-400 text-sm max-w-[250px]">O ambiente executou a injeção com sucesso no processo alvo.</p>
-               </>
-             )}
-
-             <button 
-               onClick={() => { setIsSuccess(false); setInputValue(''); }}
-               className="mt-6 text-sm text-[var(--color-cyan-neon)] hover:underline"
-             >
-               Testar Novamente
-             </button>
-          </div>
-        ) : (
-          renderScenario()
-        )}
+        {isSuccess ? renderSuccessView() : renderScenario()}
       </div>
 
     </aside>
