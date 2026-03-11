@@ -73,54 +73,72 @@ export function TopicDetails({ topic, onBack, onTest }: TopicDetailsProps) {
                 </div>
               )}
 
-              {/* Recon / Red Flag Section */}
-              {vuln.recon_summary && (
-                <div className="mt-4 border border-dashed border-orange-500/50 bg-[#140b00] rounded-lg p-5">
-                  <h4 className="text-orange-500 font-bold flex items-center mb-2 uppercase tracking-wider text-xs">
-                    <span className="w-2 h-2 rounded-full bg-orange-500 mr-2 animate-pulse"></span>
-                    Identificação do Alvo
-                  </h4>
-                  <p className="text-sm text-gray-300 mb-4">{vuln.recon_summary}</p>
-                  
-                  {vuln.visual_pattern && (
-                    <div className="bg-black/80 rounded p-3 font-mono text-sm border border-[#333] overflow-x-auto text-gray-400">
-                      {vuln.visual_pattern.split('\n').map((line, i) => (
-                        <div key={i}>
-                          {line.split(/(\[!!!.*?!!!\])/).map((part, j) => {
-                            if (part.startsWith('[!!!') && part.endsWith('!!!]')) {
-                              const highlight = part.replace(/\[!!!|!!!\]/g, '');
-                              return <span key={j} className="text-orange-400 bg-orange-500/10 px-1 py-0.5 rounded font-bold">{highlight}</span>;
-                            }
-                            return <span key={j}>{part}</span>;
-                          })}
+              {/* Educational Sections (Collapsible) */}
+              {(vuln.recon_summary || vuln.mindset_goal) && (
+                <div className="mt-4 flex flex-col gap-3">
+                  {/* Recon / Red Flag Section */}
+                  {vuln.recon_summary && (
+                    <details className="group border border-dashed border-orange-500/50 bg-[#140b00] rounded-lg outline-none [&_summary::-webkit-details-marker]:hidden">
+                      <summary className="text-orange-500 font-bold flex items-center justify-between p-3 cursor-pointer select-none rounded-lg hover:bg-orange-500/5 transition-colors">
+                        <div className="flex items-center uppercase tracking-wider text-xs">
+                          <span className="relative flex h-2.5 w-2.5 mr-3">
+                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
+                            <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-orange-500"></span>
+                          </span>
+                          Identificação do Alvo
                         </div>
-                      ))}
-                      {/* Attacker Mindset Section */}
-              {vuln.mindset_goal && (
-                <div className="mt-4 border border-[var(--color-hacker-border)] bg-[#0f0a14] rounded-lg p-5">
-                  <h4 className="text-purple-400 font-bold flex items-center mb-3 uppercase tracking-wider text-xs">
-                    <Target size={14} className="mr-2" />
-                    Guia do Atacante (Mindset)
-                  </h4>
-                  
-                  <div className="space-y-4">
-                    <div>
-                      <h5 className="text-purple-300 text-xs font-semibold mb-1 uppercase opacity-80">Nosso Objetivo:</h5>
-                      <p className="text-sm text-gray-300">{vuln.mindset_goal}</p>
-                    </div>
-                    
-                    {vuln.mindset_why && (
-                      <div>
-                        <h5 className="text-purple-300 text-xs font-semibold mb-1 uppercase opacity-80">Por que testar assim?</h5>
-                        <p className="text-sm text-gray-400 leading-relaxed italic border-l-2 border-purple-500/30 pl-3">
-                          "{vuln.mindset_why}"
-                        </p>
+                        <ChevronLeft size={16} className="transform group-open:-rotate-90 transition-transform" />
+                      </summary>
+                      <div className="px-4 pb-4 pt-1 border-t border-orange-500/20 mt-1">
+                        <p className="text-sm text-gray-300 mb-4 mt-3">{vuln.recon_summary}</p>
+                        
+                        {vuln.visual_pattern && (
+                          <div className="bg-black/80 rounded p-3 font-mono text-sm border border-[#333] overflow-x-auto text-gray-400">
+                            {vuln.visual_pattern.split('\n').map((line, i) => (
+                              <div key={i}>
+                                {line.split(/(\[!!!.*?!!!\])/).map((part, j) => {
+                                  if (part.startsWith('[!!!') && part.endsWith('!!!]')) {
+                                    const highlight = part.replace(/\[!!!|!!!\]/g, '');
+                                    return <span key={j} className="text-orange-400 bg-orange-500/10 px-1 py-0.5 rounded font-bold">{highlight}</span>;
+                                  }
+                                  return <span key={j}>{part}</span>;
+                                })}
+                              </div>
+                            ))}
+                          </div>
+                        )}
                       </div>
-                    )}
-                  </div>
-                </div>
-              )}
-            </div>
+                    </details>
+                  )}
+
+                  {/* Attacker Mindset Section */}
+                  {vuln.mindset_goal && (
+                    <details className="group border border-[var(--color-hacker-border)] bg-[#0f0a14] rounded-lg outline-none [&_summary::-webkit-details-marker]:hidden">
+                      <summary className="text-purple-400 font-bold flex items-center justify-between p-3 cursor-pointer select-none rounded-lg hover:bg-purple-900/20 transition-colors">
+                        <div className="flex items-center uppercase tracking-wider text-xs">
+                          <Target size={14} className="mr-2" />
+                          <span className="animate-pulse">Guia do Iniciante (Mindset)</span>
+                        </div>
+                        <ChevronLeft size={16} className="transform group-open:-rotate-90 transition-transform" />
+                      </summary>
+                      <div className="px-4 pb-4 pt-1 border-t border-purple-900/40 mt-1">
+                        <div className="space-y-4 mt-3">
+                          <div>
+                            <h5 className="text-purple-300 text-xs font-semibold mb-1 uppercase opacity-80">Nosso Objetivo:</h5>
+                            <p className="text-sm text-gray-300">{vuln.mindset_goal}</p>
+                          </div>
+                          
+                          {vuln.mindset_why && (
+                            <div>
+                              <h5 className="text-purple-300 text-xs font-semibold mb-1 uppercase opacity-80">Por que testar assim?</h5>
+                              <p className="text-sm text-gray-400 leading-relaxed italic border-l-2 border-purple-500/30 pl-3">
+                                "{vuln.mindset_why}"
+                              </p>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </details>
                   )}
                 </div>
               )}
