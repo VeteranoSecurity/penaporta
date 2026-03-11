@@ -1,0 +1,23 @@
+@import "tailwindcss";
+
+@theme {
+  --color-cyan-neon: #00f0ff;
+  --color-lime-neon: #39ff14;
+  --color-hacker-bg: #0a0a0a;
+  --color-hacker-card: #141414;
+  --color-hacker-border: #333333;
+}
+
+@layer base {
+  body {
+    background-color: var(--color-hacker-bg);
+    color: #e5e7eb;
+    font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  ::selection {
+    background-color: rgba(0, 240, 255, 0.3);
+  }
+}
