@@ -56,7 +56,7 @@ export function TopicDetails({ topic, onBack, onTest }: TopicDetailsProps) {
               
               {/* Example block with React Markdown */}
               {vuln.example && (
-                <div className="text-sm text-gray-300 bg-black/40 p-4 rounded-md border-l-2 border-[var(--color-cyan-neon)] prose prose-invert max-w-none prose-sm leading-relaxed">
+                <div className="text-sm text-gray-300 bg-black/40 p-4 rounded-md border-l-2 border-[var(--color-cyan-neon)] prose prose-invert max-w-none prose-sm leading-relaxed mb-4">
                   <ReactMarkdown 
                     components={{
                       code({node, className, children, ...props}: any) {
@@ -70,6 +70,33 @@ export function TopicDetails({ topic, onBack, onTest }: TopicDetailsProps) {
                   >
                     {vuln.example}
                   </ReactMarkdown>
+                </div>
+              )}
+
+              {/* Recon / Red Flag Section */}
+              {vuln.recon_summary && (
+                <div className="mt-4 border border-dashed border-orange-500/50 bg-[#140b00] rounded-lg p-5">
+                  <h4 className="text-orange-500 font-bold flex items-center mb-2 uppercase tracking-wider text-xs">
+                    <span className="w-2 h-2 rounded-full bg-orange-500 mr-2 animate-pulse"></span>
+                    Identificação do Alvo
+                  </h4>
+                  <p className="text-sm text-gray-300 mb-4">{vuln.recon_summary}</p>
+                  
+                  {vuln.visual_pattern && (
+                    <div className="bg-black/80 rounded p-3 font-mono text-sm border border-[#333] overflow-x-auto text-gray-400">
+                      {vuln.visual_pattern.split('\n').map((line, i) => (
+                        <div key={i}>
+                          {line.split(/(\[!!!.*?!!!\])/).map((part, j) => {
+                            if (part.startsWith('[!!!') && part.endsWith('!!!]')) {
+                              const highlight = part.replace(/\[!!!|!!!\]/g, '');
+                              return <span key={j} className="text-orange-400 bg-orange-500/10 px-1 py-0.5 rounded font-bold">{highlight}</span>;
+                            }
+                            return <span key={j}>{part}</span>;
+                          })}
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
               )}
             </div>

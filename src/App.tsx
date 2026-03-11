@@ -21,7 +21,7 @@ function App() {
       <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-5 pointer-events-none mix-blend-overlay"></div>
       <Header />
       
-      <main className="flex-1 w-full max-w-7xl mx-auto px-4 py-8 relative z-10 flex flex-col md:flex-row gap-6 md:gap-8 overflow-hidden">
+      <main className="flex-1 w-full max-w-7xl mx-auto px-4 py-8 relative z-10 flex flex-col md:flex-row gap-6 md:gap-8">
         
         {/* Sidebar Navigation */}
         <Sidebar 

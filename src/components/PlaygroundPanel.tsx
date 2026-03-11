@@ -28,7 +28,6 @@ export function PlaygroundPanel({ vulnerability, onClose }: PlaygroundPanelProps
     setIsLoading(true);
     setErrorMsg('');
 
-    // Simulate network delay
     let delay = 800;
     
     // Simulate SQLi #2 (Time-Blind) delay
@@ -38,11 +37,17 @@ export function PlaygroundPanel({ vulnerability, onClose }: PlaygroundPanelProps
 
     setTimeout(() => {
       setIsLoading(false);
-      // Check if input perfectly matches the payload for the success scenario
+      
+      // Strict exact match for success
       if (inputValue === vulnerability.payload) {
         setIsSuccess(true);
       } else {
-        setErrorMsg('Falha na autenticação ou payload inválido. Tente novamente.');
+        // If wrong, check if we should display the recon hint
+        if (vulnerability.hint_simulation) {
+           setErrorMsg(`Quase lá, mas verifique se você está injetando no parâmetro correto destacado na dica: ${vulnerability.hint_simulation}`);
+        } else {
+           setErrorMsg('Falha na autenticação ou payload inválido. Tente novamente.');
+        }
       }
     }, delay);
   };
@@ -176,9 +181,20 @@ export function PlaygroundPanel({ vulnerability, onClose }: PlaygroundPanelProps
       {/* Content */}
       <div className="p-6 flex-1 flex flex-col">
         <div className="mb-6">
-          <span className="text-[10px] uppercase font-bold text-[var(--color-cyan-neon)] tracking-wider bg-[var(--color-cyan-neon)]/10 px-2 py-1 rounded inline-block mb-2">Simulação Ativa</span>
-          <h4 className="text-xl font-bold text-white">{vulnerability.title}</h4>
-          <p className="text-xs text-gray-400 mt-1 line-clamp-2" title={vulnerability.scenario}>{vulnerability.scenario}</p>
+          <span className="text-[10px] uppercase font-bold text-[var(--color-cyan-neon)] tracking-wider bg-[var(--color-cyan-neon)]/10 px-2 py-1 rounded inline-block mb-2 flex-auto w-max">
+             Simulação Ativa
+          </span>
+          <h4 className="text-xl font-bold text-white mb-2">{vulnerability.title}</h4>
+          
+          {/* Simulation Hint */}
+          {vulnerability.hint_simulation && (
+             <div className="bg-orange-500/10 border border-orange-500/30 p-3 rounded text-sm text-gray-300 mt-2 mb-4">
+               <strong className="text-orange-500 flex items-center text-xs uppercase mb-1">
+                 <ShieldAlert size={14} className="mr-1" /> Dica de Reconhecimento
+               </strong>
+               {vulnerability.hint_simulation}
+             </div>
+          )}
         </div>
 
         {isSuccess ? (
