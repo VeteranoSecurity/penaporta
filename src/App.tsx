@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { Header } from './components/Header';
 import { TopicCard } from './components/TopicCard';
 import { TopicDetails } from './components/TopicDetails';
 import { Sidebar } from './components/Sidebar';
@@ -17,29 +16,29 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col w-full relative">
-      <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-5 pointer-events-none mix-blend-overlay"></div>
-      <Header />
+    <div className="h-screen w-full flex bg-[#050505] text-white overflow-hidden relative font-sans">
+      <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-5 pointer-events-none mix-blend-overlay z-0"></div>
       
-      <main className="flex-1 w-full max-w-7xl mx-auto px-4 py-8 relative z-10 flex flex-col md:flex-row gap-6 md:gap-8">
-        
-        {/* Sidebar Navigation */}
-        <Sidebar 
-          selectedTopicId={selectedTopic?.id} 
-          onSelectTopic={handleSelectTopic} 
-        />
+      {/* 1. Left Sidebar (Fixed) */}
+      <Sidebar 
+        selectedTopicId={selectedTopic?.id} 
+        onSelectTopic={handleSelectTopic} 
+      />
 
-        {/* Main Content Area */}
-        <div className="flex-1 w-full min-w-0">
+      {/* 2. Main Content Area (Scrollable) */}
+      <main className="flex-1 overflow-y-auto relative z-10 custom-scrollbar">
+        <div className="p-8 md:p-12 max-w-5xl">
           {!selectedTopic ? (
             <div className="animate-in fade-in duration-500">
-              <div className="mb-8 text-center md:text-left">
-                <h2 className="text-2xl font-semibold text-white border-l-4 border-[var(--color-lime-neon)] pl-3">
-                  Tecnologias Populares
+              <div className="mb-10 text-left">
+                <h2 className="text-3xl font-bold text-white border-l-4 border-[var(--color-lime-neon)] pl-4">
+                  Bases de Conhecimento
                 </h2>
-                <p className="text-gray-400 mt-2 text-sm">Selecione uma categoria na barra lateral ou nos cards abaixo.</p>
+                <p className="text-gray-400 mt-3 text-sm max-w-2xl">
+                  Selecione uma tecnologia na barra lateral ou nos cards abaixo para visualizar roteiros de testes de invasão, payloads práticos e laboratórios guiados de reconhecimento.
+                </p>
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {mockTopics.map(topic => (
                   <TopicCard 
                     key={topic.id} 
@@ -57,19 +56,15 @@ function App() {
             />
           )}
         </div>
-
-        {/* Interactive Playground (Right Sidebar) */}
-        {testingVuln && (
-          <PlaygroundPanel 
-            vulnerability={testingVuln}
-            onClose={() => setTestingVuln(null)}
-          />
-        )}
       </main>
-      
-      <footer className="w-full border-t border-[var(--color-hacker-border)] py-6 text-center text-gray-500 text-sm mt-auto relative z-10">
-        <p>Pé na Porta! &copy; {new Date().getFullYear()} - Plataforma Educacional de Cybersecurity</p>
-      </footer>
+
+      {/* 3. Interactive Playground (Right Drawer) */}
+      {testingVuln && (
+        <PlaygroundPanel 
+          vulnerability={testingVuln}
+          onClose={() => setTestingVuln(null)}
+        />
+      )}
     </div>
   );
 }

@@ -268,7 +268,7 @@ export function PlaygroundPanel({ vulnerability, onClose }: PlaygroundPanelProps
   };
 
   return (
-    <aside className="w-full lg:w-96 flex-shrink-0 bg-[#050505] border-l md:border-l-0 lg:border-l lg:border-t-0 border-[#222] lg:h-[calc(100vh-80px)] lg:sticky lg:top-20 z-20 flex flex-col overflow-y-auto animate-in slide-in-from-right-8 duration-500">
+    <aside className="w-full lg:w-[400px] flex-shrink-0 bg-[#080808] border-l border-[#222] h-full overflow-y-auto relative z-30 flex flex-col shadow-2xl animate-in slide-in-from-right-8 duration-300 custom-scrollbar">
       
       {/* Header */}
       <div className="p-4 border-b border-[#222] flex items-center justify-between bg-black sticky top-0 z-10">
