@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ChevronLeft, Copy, Check, Terminal, PlayCircle } from 'lucide-react';
+import { ChevronLeft, Copy, Check, Terminal, PlayCircle, Target } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import type { Topic, Vulnerability } from '../data/mockData';
 
@@ -95,7 +95,32 @@ export function TopicDetails({ topic, onBack, onTest }: TopicDetailsProps) {
                           })}
                         </div>
                       ))}
+                      {/* Attacker Mindset Section */}
+              {vuln.mindset_goal && (
+                <div className="mt-4 border border-[var(--color-hacker-border)] bg-[#0f0a14] rounded-lg p-5">
+                  <h4 className="text-purple-400 font-bold flex items-center mb-3 uppercase tracking-wider text-xs">
+                    <Target size={14} className="mr-2" />
+                    Guia do Atacante (Mindset)
+                  </h4>
+                  
+                  <div className="space-y-4">
+                    <div>
+                      <h5 className="text-purple-300 text-xs font-semibold mb-1 uppercase opacity-80">Nosso Objetivo:</h5>
+                      <p className="text-sm text-gray-300">{vuln.mindset_goal}</p>
                     </div>
+                    
+                    {vuln.mindset_why && (
+                      <div>
+                        <h5 className="text-purple-300 text-xs font-semibold mb-1 uppercase opacity-80">Por que testar assim?</h5>
+                        <p className="text-sm text-gray-400 leading-relaxed italic border-l-2 border-purple-500/30 pl-3">
+                          "{vuln.mindset_why}"
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
                   )}
                 </div>
               )}
