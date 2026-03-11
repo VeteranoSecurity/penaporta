@@ -1,14 +1,15 @@
 import { useState } from 'react';
-import { ChevronLeft, Copy, Check, Terminal } from 'lucide-react';
+import { ChevronLeft, Copy, Check, Terminal, PlayCircle } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import type { Topic, Vulnerability } from '../data/mockData';
 
 interface TopicDetailsProps {
   topic: Topic;
   onBack: () => void;
+  onTest: (vuln: Vulnerability) => void;
 }
 
-export function TopicDetails({ topic, onBack }: TopicDetailsProps) {
+export function TopicDetails({ topic, onBack, onTest }: TopicDetailsProps) {
   const [copiedId, setCopiedId] = useState<string | null>(null);
 
   const handleCopy = (id: string, payload: string) => {
@@ -38,10 +39,19 @@ export function TopicDetails({ topic, onBack }: TopicDetailsProps) {
             
             {/* Header info */}
             <div className="p-5 border-b border-[var(--color-hacker-border)] bg-[#0d0d0d]">
-              <h3 className="text-xl font-semibold text-white mb-2 flex items-center">
-                <Terminal size={18} className="mr-2 text-[var(--color-cyan-neon)]" />
-                {vuln.title}
-              </h3>
+              <div className="flex items-start justify-between mb-2">
+                <h3 className="text-xl font-semibold text-white flex items-center">
+                  <Terminal size={18} className="mr-2 text-[var(--color-cyan-neon)]" />
+                  {vuln.title}
+                </h3>
+                <button 
+                  onClick={() => onTest(vuln)}
+                  className="flex items-center text-xs font-bold text-[var(--color-lime-neon)] hover:text-white bg-[var(--color-lime-neon)]/10 hover:bg-[var(--color-lime-neon)]/30 border border-[var(--color-lime-neon)]/50 px-3 py-1.5 rounded transition-all"
+                >
+                  <PlayCircle size={14} className="mr-1.5" />
+                  Testar
+                </button>
+              </div>
               <p className="text-sm text-gray-400 mb-4"><strong>Cenário Básico:</strong> {vuln.scenario}</p>
               
               {/* Example block with React Markdown */}

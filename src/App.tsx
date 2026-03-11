@@ -3,10 +3,18 @@ import { Header } from './components/Header';
 import { TopicCard } from './components/TopicCard';
 import { TopicDetails } from './components/TopicDetails';
 import { Sidebar } from './components/Sidebar';
-import { mockTopics, type Topic } from './data/mockData';
+import { PlaygroundPanel } from './components/PlaygroundPanel';
+import { mockTopics, type Topic, type Vulnerability } from './data/mockData';
 
 function App() {
   const [selectedTopic, setSelectedTopic] = useState<Topic | null>(null);
+  const [testingVuln, setTestingVuln] = useState<Vulnerability | null>(null);
+
+  // Close playground when topic changes
+  const handleSelectTopic = (topic: Topic) => {
+    setSelectedTopic(topic);
+    setTestingVuln(null);
+  };
 
   return (
     <div className="min-h-screen flex flex-col w-full relative">
@@ -18,7 +26,7 @@ function App() {
         {/* Sidebar Navigation */}
         <Sidebar 
           selectedTopicId={selectedTopic?.id} 
-          onSelectTopic={setSelectedTopic} 
+          onSelectTopic={handleSelectTopic} 
         />
 
         {/* Main Content Area */}
@@ -36,7 +44,7 @@ function App() {
                   <TopicCard 
                     key={topic.id} 
                     topic={topic} 
-                    onClick={setSelectedTopic} 
+                    onClick={handleSelectTopic} 
                   />
                 ))}
               </div>
@@ -44,10 +52,19 @@ function App() {
           ) : (
             <TopicDetails 
               topic={selectedTopic} 
-              onBack={() => setSelectedTopic(null)} 
+              onBack={() => { setSelectedTopic(null); setTestingVuln(null); }} 
+              onTest={setTestingVuln}
             />
           )}
         </div>
+
+        {/* Interactive Playground (Right Sidebar) */}
+        {testingVuln && (
+          <PlaygroundPanel 
+            vulnerability={testingVuln}
+            onClose={() => setTestingVuln(null)}
+          />
+        )}
       </main>
       
       <footer className="w-full border-t border-[var(--color-hacker-border)] py-6 text-center text-gray-500 text-sm mt-auto relative z-10">
