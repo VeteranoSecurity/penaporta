@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { ChevronLeft, Copy, Check } from 'lucide-react';
+import { ChevronLeft, Copy, Check, Terminal } from 'lucide-react';
+import ReactMarkdown from 'react-markdown';
 import type { Topic, Vulnerability } from '../data/mockData';
 
 interface TopicDetailsProps {
@@ -33,23 +34,88 @@ export function TopicDetails({ topic, onBack }: TopicDetailsProps) {
 
       <div className="space-y-6">
         {topic.vulnerabilities.map((vuln: Vulnerability) => (
-          <div key={vuln.id} className="bg-[var(--color-hacker-card)] border border-[var(--color-hacker-border)] rounded-lg overflow-hidden">
-            <div className="p-4 border-b border-[var(--color-hacker-border)] bg-[#0d0d0d]">
-              <h3 className="text-xl font-semibold text-white mb-1">{vuln.title}</h3>
-              <p className="text-sm text-gray-400">Cenário: {vuln.scenario}</p>
+          <div key={vuln.id} className="bg-[var(--color-hacker-card)] border border-[var(--color-hacker-border)] rounded-lg overflow-hidden flex flex-col shadow-lg">
+            
+            {/* Header info */}
+            <div className="p-5 border-b border-[var(--color-hacker-border)] bg-[#0d0d0d]">
+              <h3 className="text-xl font-semibold text-white mb-2 flex items-center">
+                <Terminal size={18} className="mr-2 text-[var(--color-cyan-neon)]" />
+                {vuln.title}
+              </h3>
+              <p className="text-sm text-gray-400 mb-4"><strong>Cenário Básico:</strong> {vuln.scenario}</p>
+              
+              {/* Example block with React Markdown */}
+              {vuln.example && (
+                <div className="text-sm text-gray-300 bg-black/40 p-4 rounded-md border-l-2 border-[var(--color-cyan-neon)] prose prose-invert max-w-none prose-sm leading-relaxed">
+                  <ReactMarkdown 
+                    components={{
+                      code({node, className, children, ...props}: any) {
+                        return (
+                          <code className="text-[var(--color-lime-neon)] bg-black px-1.5 py-0.5 rounded text-xs font-mono" {...props}>
+                            {children}
+                          </code>
+                        );
+                      }
+                    }}
+                  >
+                    {vuln.example}
+                  </ReactMarkdown>
+                </div>
+              )}
             </div>
-            <div className="p-4 bg-black relative group">
-              <pre className="text-[var(--color-lime-neon)] font-mono text-sm overflow-x-auto p-2 rounded">
+
+            {/* Payload Area */}
+            <div className="p-5 bg-black relative group">
+              <div className="text-xs text-gray-500 mb-2 uppercase tracking-wide font-semibold">Payload Rápido</div>
+              <pre className="text-[var(--color-lime-neon)] font-mono text-sm overflow-x-auto p-4 bg-[#050505] rounded border border-[#222]">
                 <code>{vuln.payload}</code>
               </pre>
               <button
                 onClick={() => handleCopy(vuln.id, vuln.payload)}
-                className="absolute top-4 right-4 p-2 bg-[var(--color-hacker-border)] hover:bg-gray-700 rounded text-gray-300 transition-colors opacity-0 group-hover:opacity-100 focus:opacity-100"
+                className="absolute top-[44px] right-5 p-2 bg-[var(--color-hacker-border)] hover:bg-gray-700 rounded text-gray-300 transition-colors opacity-0 group-hover:opacity-100 focus:opacity-100 shadow-md"
                 title="Copiar Payload"
               >
                 {copiedId === vuln.id ? <Check size={18} className="text-green-400" /> : <Copy size={18} />}
               </button>
             </div>
+
+            {/* Markdown Expandable Result */}
+            {vuln.result && (
+              <details className="group border-t border-[var(--color-hacker-border)] bg-gray-900/40 outline-none">
+                <summary className="text-sm font-semibold text-[var(--color-cyan-neon)] cursor-pointer select-none list-none flex items-center p-4 hover:bg-white/5 transition-colors focus:outline-none">
+                   <ChevronLeft size={16} className="mr-2 transform group-open:-rotate-90 transition-transform" />
+                   Ver Resultado / Resposta Esperada
+                </summary>
+                <div className="px-5 pb-5 pt-2 border-t border-black/20">
+                  <div className="text-sm text-gray-300 bg-[#080808] rounded-md p-4 border border-[#222] shadow-inner prose prose-invert max-w-none prose-sm">
+                    <ReactMarkdown 
+                      components={{
+                        code({node, inline, className, children, ...props}: any) {
+                          const match = /language-(\w+)/.exec(className || '');
+                          return !inline ? (
+                            <div className="mt-2 mb-2">
+                              {match && <div className="text-[10px] text-gray-500 uppercase px-2 py-1 bg-[#1a1a1a] rounded-t-md inline-block border-t border-l border-r border-[#333]">{match[1]}</div>}
+                              <pre className={`p-3 bg-[#000] rounded-b-md rounded-tr-md overflow-x-auto border border-[#333] text-gray-300 font-mono block ${!match ? 'rounded-tl-md' : ''}`}>
+                                <code className={className} {...props}>
+                                  {children}
+                                </code>
+                              </pre>
+                            </div>
+                          ) : (
+                            <code className="text-gray-200 bg-[#1f1f1f] px-1 py-0.5 rounded font-mono text-xs" {...props}>
+                              {children}
+                            </code>
+                          )
+                        }
+                      }}
+                    >
+                      {vuln.result}
+                    </ReactMarkdown>
+                  </div>
+                </div>
+              </details>
+            )}
+            
           </div>
         ))}
       </div>
