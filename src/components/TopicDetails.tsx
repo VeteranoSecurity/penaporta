@@ -22,10 +22,10 @@ export function TopicDetails({ topic, onBack, onTest }: TopicDetailsProps) {
     <div className="max-w-4xl mx-auto w-full animate-in fade-in slide-in-from-bottom-4 duration-500">
       <button 
         onClick={onBack}
-        className="flex items-center text-gray-400 hover:text-[var(--color-cyan-neon)] mb-6 transition-colors"
+        className="inline-flex items-center text-red-500 border border-red-500/50 bg-red-500/10 hover:bg-red-600 hover:text-white hover:shadow-[0_0_15px_rgba(239,68,68,0.6)] hover:border-red-500 px-4 py-2 rounded-md font-bold uppercase tracking-wider text-xs mb-8 transition-all duration-300"
       >
-        <ChevronLeft size={20} className="mr-1" />
-        Voltar para os Tópicos
+        <ChevronLeft size={16} className="mr-1.5" />
+        Voltar para Categorias
       </button>
 
       <div className="mb-8">
