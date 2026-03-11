@@ -1,81 +1,58 @@
 <div align="center">
   <h1>💻 Pé na Porta! 🚪</h1>
-  <p><strong>Plataforma Educacional de Cybersecurity & Pentest Cheat Sheets</strong></p>
+  <p><strong>Plataforma Educacional Interativa de Cybersecurity & Pentest</strong></p>
 </div>
 
 ---
 
 ## 📖 Sobre o Projeto
 
-**Pé na Porta!** é um **Mínimo Produto Viável (MVP)** focado em facilitar a vida de estudantes de cibersegurança e pentesters. A plataforma serve como um repositório rápido e acessível para *Cheat Sheets* e *Payloads* de diversas tecnologias e vulnerabilidades comuns.
+O **Pé na Porta!** é uma plataforma educacional inovadora e um laboratório prático (*Playground*) voltado para entusiastas, estudantes de cibersegurança e profissionais da área (Pentesters). O grande diferencial do projeto é ir além de um simples repositório de *Cheat Sheets*, oferecendo um ambiente simulado em tempo real onde o usuário pode não apenas copiar payloads, mas entender o contexto, a identificação do alvo e testar a execução das falhas na prática.
 
-Esta aplicação foi desenvolvida focando na melhor experiência de uso, com tecnologias modernas de Frontend e uma imersiva **Estética Hacker** (_Dark Mode, tons profundos e detalhes em Neon Ciano e Verde Limão_).
+Desenvolvido com uma arquitetura moderna de três colunas inspirada em documentações de alto padrão, a plataforma combina uma navegação fluida com a estética visual imersiva da cultura Hacker (*Dark Mode, layouts focados e tipografia monoespaçada*).
 
-## 🚀 Funcionalidades
+## 🎯 Principais Funcionalidades
 
-- **Navegação Dinâmica:** Selecione tecnologias através de uma interface de cards intuitiva.
-- **Categorias Iniciais:** Dados pré-configurados cobrindo categorias-chave: *SQL Injection*, *Command Injection* e *PHP Bypasses*.
-- **Lista de Vulnerabilidades:** Visualização detalhada indicando cenários específicos de ataque para cada tecnologia.
-- **Cópia de Payload Rápida:** Botão "Copiar para a Área de Transferência" nativo (_Clipboard API_) para agilidade em testes.
-- **Estética Hacker & UI Moderna:** Componentes reativos com Tailwind e 100% responsiva para Mobile, Tablet e Desktop.
+- **Laboratório Interativo (Playground):** Simuladores imersivos (Terminais estilo UNIX, listeners OAST estilo Burp Collaborator e formulários Web falsos) integrados nativamente para testar as vulnerabilidades lado a lado com a teoria.
+- **Educação Contextualizada:** Dicas detalhadas cobrindo a **Identificação do Alvo (Reconhecimento)** e o **Guia do Atacante (Mindset)**, assegurando o aprendizado do *Por Quê* testar e não apenas do *Como*.
+- **Estrutura de Documentação Profissional:** Layout ultra-rápido de navegação por componentes (SQL Injection, Command Injection, PHP Bypasses) com "Accordions" inteligentes que otimizam o espaço.
+- **Micro-interações:** Feedbacks visuais customizados (animações de radar, pulsos luminosos coloridos, alertas em neon) que guiam intuitivamente a jornada de usuários de todos os níveis.
+- **Cópia Rápida de Payload:** Botões estratégicos (usando a Clipboard API nativa) para ganho de agilidade durante o uso da ferramenta no dia a dia.
 
 ## 🛠️ Tecnologias Utilizadas
 
-Este projeto foi construído utilizando as seguintes ferramentas:
+Este projeto foi construído empregando as melhores práticas do ecossistema de desenvolvimento web moderno:
 
-- **[React (v18+)](https://react.dev/)** - Construção de UI.
-- **[TypeScript](https://www.typescriptlang.org/)** - Tipagem estática e segurança.
-- **[Vite](https://vitejs.dev/)** - Setup do ecossistema e servidor dev ultrarrápido.
-- **[Tailwind CSS v4](https://tailwindcss.com/)** - Motor de estilização responsivo e design system.
-- **[Lucide React](https://lucide.dev/)** - Iconografia moderna.
+- **[React 18+](https://react.dev/)** - Arquitetura baseada em componentes funcionais e reativos.
+- **[TypeScript](https://www.typescriptlang.org/)** - Previsibilidade de código e tipagem estática robusta.
+- **[Vite](https://vitejs.dev/)** - Setup veloz e otimizado de build.
+- **[Tailwind CSS v4](https://tailwindcss.com/)** - Estilização granular e design system para a temática hacker (Neon Cyan/Lime).
+- **[Lucide React](https://lucide.dev/)** - Integração leve de SVG e iconografia.
 
-## ⚙️ Instalação e Execução
+## ⚙️ Como Executar o Projeto Localmente
 
-Siga os passos abaixo para rodar o projeto na sua máquina:
+Siga as breves instruções abaixo para ter acesso à plataforma completa rodando em seu ambiente:
 
-### 1. Clone o repositório
+### 1. Clonagem e Acesso:
 ```bash
-git clone https://github.com/SEU_USUARIO/penaporta.git
+git clone https://github.com/VeteranoSecurity/penaporta.git
 cd penaporta
 ```
 
-### 2. Instale as dependências
+### 2. Instalação de Dependências:
 ```bash
 npm install
 ```
 
-### 3. Inicie o Servidor de Desenvolvimento
+### 3. Start da Aplicação:
 ```bash
 npm run dev
 ```
 
-> **Acesso Local:** A aplicação estará disponível em `http://localhost:5173`.
-
-## 📁 Estrutura de Arquivos
-
-Abaixo, a arquitetura base do MVP que facilita expansões (adição de novos Tópicos):
-
-```text
-penaporta/
-├── public/                 # Assets públicos estáticos
-├── src/
-│   ├── components/         # Componentes React Reutilizáveis
-│   │   ├── Header.tsx      # Cabeçalho com o nome e subtítulo
-│   │   ├── TopicCard.tsx   # Card com interações Neon para as tecnologias
-│   │   └── TopicDetails.tsx# Visualização das vulnerabilidades e os blocos de código
-│   ├── data/               
-│   │   └── mockData.ts     # Base de dados Mockada (Interfaces e objetos de Payloads)
-│   ├── App.tsx             # Componente raiz
-│   ├── index.css           # Configurações globais e variáveis do Tailwind (Neon Hacking Theme)
-│   └── main.tsx            # Ponto de entrada reactDOM
-├── index.html              # Template principal
-├── package.json            # Dependências e scripts
-├── tsconfig.json           # Configuração do TypeScript
-└── vite.config.ts          # Config do Vite integrado ao Tailwind v4
-```
+> **Acesso Local:** A aplicação estará disponível imediatamente em seu navegador pelo endereço `http://localhost:5173`.
 
 ---
 
 <div align="center">
-  <p>Feito com 💚 e muito código pela automatização de relatórios/cheats! ⚡</p>
+  <p>Desenvolvido para fortalecer a comunidade através do conhecimento ofensivo acessível. ⚡💻</p>
 </div>
