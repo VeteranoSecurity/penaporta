@@ -7,32 +7,37 @@ Este arquivo gerencia o progresso das funcionalidades, conteúdos e melhorias da
 ## 📌 Status Atual do Projeto
 
 - [x] **Correção de Infraestrutura & Build**: Arquivo `src/data/mockData.ts` restaurado e validação do TypeScript sem erros.
-- [x] **Base de Conhecimento Inicial**: 3 Categorias essenciais configuradas com 9 vulnerabilidades e guias de mindset:
-  - [x] **SQL Injection**: Login Bypass, Time-Based Blind e Auth Bypass via UNION.
-  - [x] **Command Injection**: Concatenação Simples, Bypass de Espaço (`$IFS`) e Out-of-Band (OAST).
-  - [x] **PHP Bypasses**: Webshell Simples, Bypass de Extensão e Type Juggling.
+- [x] **Base de Conhecimento Expandida**: 8 Categorias OWASP configuradas com 80 vulnerabilidades técnicas completas (10 por categoria):
+  - [x] **SQL Injection** (10 vulnerabilidades)
+  - [x] **Command Injection** (10 vulnerabilidades)
+  - [x] **Cross-Site Scripting - XSS** (10 vulnerabilidades)
+  - [x] **Server-Side Request Forgery - SSRF** (10 vulnerabilidades)
+  - [x] **IDOR & Controle de Acesso** (10 vulnerabilidades)
+  - [x] **JWT & Autenticação** (10 vulnerabilidades)
+  - [x] **File Inclusion - LFI/RFI** (10 vulnerabilidades)
+  - [x] **PHP Bypasses** (10 vulnerabilidades)
 
 ---
 
 ## 🎯 Próximos Passos & Funcionalidades Pendentes
 
 ### 1. 📚 Expansão de Conteúdo (Novas Categorias OWASP)
-- [ ] **XSS (Cross-Site Scripting)**
-  - [ ] Stored XSS (Injeção em comentários/perfil)
-  - [ ] Reflected XSS (Bypass de filtros básicos de caracteres)
-  - [ ] DOM-based XSS (Manipulação de `location.hash` / `innerHTML`)
-- [ ] **SSRF (Server-Side Request Forgery)**
-  - [ ] Leitura de Metadados Cloud (AWS `169.254.169.254` / GCP)
-  - [ ] SSRF via URL parser bypass (`http://127.0.0.1` vs `http://2130706433`)
-- [ ] **IDOR & Broken Access Control**
-  - [ ] Manipulação de IDs numéricos simples em endpoints REST (`GET /api/user/102`)
-  - [ ] IDOR via UUID v1 / Hashing previsível
-- [ ] **JWT & Autenticação**
-  - [ ] Bypass via Algoritmo `none`
-  - [ ] Ataque de chave fraca (HMAC secret brute force)
-- [ ] **File Inclusion (LFI / RFI)**
-  - [ ] Traversal clássico (`../../../../etc/passwd`)
-  - [ ] PHP Wrappers (`php://filter/read=convert.base64-encode/resource=index.php`)
+- [x] **XSS (Cross-Site Scripting)**
+  - [x] Reflected XSS (Bypass de WAF via `<svg/onload>`)
+  - [x] Stored XSS em Comentários (`<img src=x onerror=fetch(...)>`)
+  - [x] DOM-based XSS (Manipulação de `location.hash` / `innerHTML`)
+- [x] **SSRF (Server-Side Request Forgery)**
+  - [x] Leitura de Metadados Cloud AWS (`169.254.169.254`)
+  - [x] SSRF via Localhost IP Parser Bypass (`http://2130706433/admin`)
+- [x] **IDOR & Broken Access Control**
+  - [x] Manipulação de IDs numéricos em endpoints REST (`GET /api/user/101`)
+  - [x] IDOR via Hash/Token previsível (`md5(userId)`)
+- [x] **JWT & Autenticação**
+  - [x] Bypass via Algoritmo `none`
+  - [x] Ataque de chave fraca HMAC (Brute-force offline)
+- [x] **File Inclusion (LFI / RFI)**
+  - [x] Directory Traversal clássico (`../../../../etc/passwd`)
+  - [x] PHP Filter Wrappers (`php://filter/read=convert.base64-encode/...`)
 
 ---
 
@@ -41,10 +46,10 @@ Este arquivo gerencia o progresso das funcionalidades, conteúdos e melhorias da
   - [x] Redesenhar a interface com estética inspirada em iOS e conceitos de *Liquid Gel / Glassmorphism* (efeitos translúcidos de vidro, `backdrop-blur`, bordas suaves, cantos super-arredondados `squircle` e micro-interações fluídas).
   - [x] Atualizar tokens visuais (`index.css`) com gradientes líquidos, néon suave e sombras em camadas profundas.
   - [x] Animação de recolher/minimizar estilo macOS Genie (`animate-genie-out` / `animate-genie-in`) aplicada nas transições de categorias.
-- [ ] **Busca Global**: Adicionar input de busca na sidebar ou topo para filtrar vulnerabilidades por nome, tag ou payload.
-- [ ] **Marcador de Progresso (Checklist do Aluno)**: Botão de "Concluído" em cada vulnerabilidade para salvar progresso via `localStorage`.
-- [ ] **Exportação de Cheatsheet**: Botão para copiar/baixar todos os payloads de uma categoria em formato Markdown ou JSON.
-- [ ] **Filtros por Dificuldade / Tipo**: Filtrar por nível (Iniciante, Intermediário, Avançado).
+- [x] **Carrossel 3D macOS Cover Flow em Vidro**: Exibição das 8 categorias na página inicial através de um carrossel 3D destacado em posição de herói (`w-[410px] h-[390px]`), com navegação por setas em vidro, teclado (setas esquerda/direita) e pílulas de paginação translúcidas.
+- [x] **Botão Início Glass Cristalino Lado a Lado com a Busca**: Botão em *Liquid Glass* de altíssima definição (`.glass-button`) com ícone de casinha posicionado no topo ao lado do campo de busca translúcido (`.glass-input`), com desfoque de vidro real `backdrop-blur-2xl` e iluminação néon.
+- [x] **Exportação de Cheatsheet**: Botão para baixar todos os payloads da categoria em arquivo `.md` formatado.
+- [x] **Filtros por Dificuldade**: Badges dinâmicas por nível (*Iniciante*, *Intermediário*, *Avançado*).
 
 ---
 

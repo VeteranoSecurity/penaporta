@@ -1,4 +1,4 @@
-import { Terminal, Database, FileCode, ArrowRight } from 'lucide-react';
+import { Terminal, Database, FileCode, ArrowRight, Code, Globe, UserCheck, Key, FolderSearch } from 'lucide-react';
 import type { Topic } from '../data/mockData';
 
 interface TopicCardProps {
@@ -9,7 +9,12 @@ interface TopicCardProps {
 const iconMap: Record<string, React.ReactNode> = {
   Terminal: <Terminal size={32} className="text-[var(--color-lime-neon)]" />,
   Database: <Database size={32} className="text-[var(--color-lime-neon)]" />,
-  FileCode: <FileCode size={32} className="text-[var(--color-lime-neon)]" />
+  FileCode: <FileCode size={32} className="text-[var(--color-lime-neon)]" />,
+  Code: <Code size={32} className="text-[var(--color-lime-neon)]" />,
+  Globe: <Globe size={32} className="text-[var(--color-lime-neon)]" />,
+  UserCheck: <UserCheck size={32} className="text-[var(--color-lime-neon)]" />,
+  Key: <Key size={32} className="text-[var(--color-lime-neon)]" />,
+  FolderSearch: <FolderSearch size={32} className="text-[var(--color-lime-neon)]" />
 };
 
 export function TopicCard({ topic, onClick }: TopicCardProps) {
@@ -22,7 +27,7 @@ export function TopicCard({ topic, onClick }: TopicCardProps) {
       <div className="absolute -right-12 -top-12 w-36 h-36 bg-lime-500/10 rounded-full blur-2xl pointer-events-none group-hover:bg-lime-500/25 transition-all duration-500"></div>
 
       <div className="flex flex-col items-center w-full">
-        <div className="p-4 rounded-2xl bg-white/5 border border-white/10 glass-panel shadow-[0_4px_20px_rgba(0,0,0,0.4)] group-hover:border-lime-500/40 group-hover:bg-lime-500/10 transition-all duration-300 mb-5">
+        <div className="p-4 rounded-2xl bg-white/5 border border-white/10 glass-panel shadow-[0_4px_20px_rgba(0,0,0,0.4)] group-hover:border-lime-500/40 group-hover:bg-lime-500/10 transition-all duration-300 mb-5 relative">
           {iconMap[topic.icon] || <Terminal size={32} className="text-[var(--color-lime-neon)]" />}
         </div>
 

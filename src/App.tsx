@@ -1,13 +1,16 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { TopicCard } from './components/TopicCard';
 import { TopicDetails } from './components/TopicDetails';
 import { Sidebar } from './components/Sidebar';
 import { PlaygroundPanel } from './components/PlaygroundPanel';
+import { HeaderSearch } from './components/HeaderSearch';
+import { CategoryCarousel } from './components/CategoryCarousel';
 import { mockTopics, type Topic, type Vulnerability } from './data/mockData';
 
 function App() {
   const [selectedTopic, setSelectedTopic] = useState<Topic | null>(null);
   const [testingVuln, setTestingVuln] = useState<Vulnerability | null>(null);
+  const [searchQuery, setSearchQuery] = useState('');
 
   // Genie animation states
   const [animState, setAnimState] = useState<'idle' | 'genie-out' | 'genie-in'>('idle');
@@ -39,6 +42,25 @@ function App() {
     }, 240);
   };
 
+  // Filter topics and vulnerabilities based on search query
+  const filteredTopics = useMemo(() => {
+    if (!searchQuery.trim()) return mockTopics;
+    const query = searchQuery.toLowerCase();
+
+    return mockTopics.filter(t => {
+      const matchTitle = t.title.toLowerCase().includes(query);
+      const matchDesc = t.description.toLowerCase().includes(query);
+      const matchVulns = t.vulnerabilities.some(v => 
+        v.title.toLowerCase().includes(query) ||
+        v.scenario.toLowerCase().includes(query) ||
+        v.payload.toLowerCase().includes(query) ||
+        (v.recon_summary && v.recon_summary.toLowerCase().includes(query))
+      );
+
+      return matchTitle || matchDesc || matchVulns;
+    });
+  }, [searchQuery]);
+
   return (
     <div className="h-screen w-full flex bg-[#050507] text-gray-100 overflow-hidden relative font-sans selection:bg-lime-500/30">
       {/* Liquid Gel ambient glowing orbs */}
@@ -52,51 +74,71 @@ function App() {
       <div className="p-4 lg:p-6 z-20 flex">
         <Sidebar 
           selectedTopicId={selectedTopic?.id} 
-          onSelectTopic={handleSelectTopic} 
+          onSelectTopic={handleSelectTopic}
         />
       </div>
 
       {/* 2. Main Content Area with macOS Genie transition container */}
       <main className="flex-1 overflow-y-auto relative z-10 custom-scrollbar p-4 lg:p-6 pl-0">
-        <div className="max-w-5xl mx-auto h-full flex flex-col">
+        <div className="max-w-5xl mx-auto h-full flex flex-col items-center">
           
-          <div className={`transition-all duration-300 ${
+          {/* Top Bar: Home Button + Translucent Frosted Glass Search Bar */}
+          <HeaderSearch 
+            searchQuery={searchQuery}
+            onSearchChange={setSearchQuery}
+            onGoHome={handleBackToGrid}
+            isHome={!selectedTopic}
+          />
+
+          <div className={`w-full transition-all duration-300 ${
             animState === 'genie-out' ? 'animate-genie-out' : 
             animState === 'genie-in' ? 'animate-genie-in' : ''
           }`}>
             {!selectedTopic ? (
-              <div className="py-4">
-                {/* Centered iOS-Style Header Banner */}
-                <div className="glass-panel rounded-3xl p-8 md:p-10 mb-8 relative overflow-hidden text-center flex flex-col items-center justify-center border border-white/10 group">
-                  <div className="absolute -top-24 left-1/2 -translate-x-1/2 w-96 h-96 bg-lime-500/10 rounded-full blur-3xl pointer-events-none group-hover:bg-lime-500/20 transition-all duration-700"></div>
-                  
-                  <div className="inline-flex items-center space-x-2 mb-4">
-                    <span className="px-4 py-1.5 text-xs font-semibold uppercase tracking-widest rounded-full bg-lime-500/15 text-[var(--color-lime-neon)] border border-lime-500/30 backdrop-blur-md font-mono">
+              <div className="py-2 w-full flex flex-col items-center">
+                {/* Sleek Compact Header Title (Proportional & Non-Intrusive) */}
+                <div className="text-center mb-4 flex flex-col items-center">
+                  <div className="inline-flex items-center space-x-2 mb-2">
+                    <span className="px-3.5 py-1 text-[11px] font-semibold uppercase tracking-widest rounded-full bg-lime-500/15 text-[var(--color-lime-neon)] border border-lime-500/30 backdrop-blur-xl font-mono shadow-[0_0_15px_rgba(57,255,20,0.15)]">
                       Plataforma Hacking & Recon
                     </span>
                   </div>
                   
-                  <h2 className="text-3xl md:text-5xl font-extrabold text-white tracking-tight mb-4 drop-shadow-[0_0_20px_rgba(255,255,255,0.15)]">
+                  <h2 className="text-3xl md:text-4xl font-extrabold text-white tracking-tight mb-2 drop-shadow-[0_0_20px_rgba(255,255,255,0.15)]">
                     Bases de Conhecimento
                   </h2>
-                  <p className="text-gray-300 text-sm md:text-base max-w-2xl leading-relaxed text-center font-normal">
-                    Selecione uma tecnologia na barra lateral ou nos cards abaixo para visualizar roteiros de testes de invasão, payloads práticos e laboratórios guiados de reconhecimento.
+                  <p className="text-gray-300 text-xs md:text-sm max-w-xl leading-relaxed text-center font-normal">
+                    Selecione uma tecnologia no carrossel ou use a busca rápida para explorar roteiros de invasão e payloads práticos.
                   </p>
                 </div>
 
-                {/* Grid of iOS Liquid Gel Cards */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {mockTopics.map(topic => (
-                    <TopicCard 
-                      key={topic.id} 
-                      topic={topic} 
-                      onClick={handleSelectTopic} 
-                    />
-                  ))}
-                </div>
+                {/* Search result indicator */}
+                {searchQuery.trim() && (
+                  <div className="mb-4 text-sm text-gray-400 font-mono text-center">
+                    Encontrado(s) <strong className="text-[var(--color-lime-neon)]">{filteredTopics.length}</strong> módulo(s) para "{searchQuery}"
+                  </div>
+                )}
+
+                {/* Interactive macOS Liquid Glass 3D Carousel or Search Grid */}
+                {!searchQuery.trim() ? (
+                  <CategoryCarousel 
+                    topics={filteredTopics}
+                    onSelectTopic={handleSelectTopic}
+                  />
+                ) : (
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
+                    {filteredTopics.map(topic => (
+                      <TopicCard 
+                        key={topic.id} 
+                        topic={topic} 
+                        onClick={handleSelectTopic}
+                      />
+                    ))}
+                  </div>
+                )}
               </div>
             ) : (
-              <div className="py-4">
+              <div className="py-2 w-full">
                 <TopicDetails 
                   topic={selectedTopic} 
                   onBack={handleBackToGrid} 

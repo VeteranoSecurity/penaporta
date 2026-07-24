@@ -1,4 +1,4 @@
-import { Terminal, Database, FileCode, Shield, Layers } from 'lucide-react';
+import { Terminal, Database, FileCode, Shield, Layers, Code, Globe, UserCheck, Key, FolderSearch } from 'lucide-react';
 import type { Topic } from '../data/mockData';
 import { mockTopics } from '../data/mockData';
 
@@ -10,7 +10,12 @@ interface SidebarProps {
 const iconMap: Record<string, React.ReactNode> = {
   Terminal: <Terminal size={18} className="transition-transform group-hover:scale-110" />,
   Database: <Database size={18} className="transition-transform group-hover:scale-110" />,
-  FileCode: <FileCode size={18} className="transition-transform group-hover:scale-110" />
+  FileCode: <FileCode size={18} className="transition-transform group-hover:scale-110" />,
+  Code: <Code size={18} className="transition-transform group-hover:scale-110" />,
+  Globe: <Globe size={18} className="transition-transform group-hover:scale-110" />,
+  UserCheck: <UserCheck size={18} className="transition-transform group-hover:scale-110" />,
+  Key: <Key size={18} className="transition-transform group-hover:scale-110" />,
+  FolderSearch: <FolderSearch size={18} className="transition-transform group-hover:scale-110" />
 };
 
 export function Sidebar({ selectedTopicId, onSelectTopic }: SidebarProps) {
@@ -32,26 +37,26 @@ export function Sidebar({ selectedTopicId, onSelectTopic }: SidebarProps) {
 
       {/* Categories Navigation with iOS Pill Selection */}
       <div className="p-4 flex-1 overflow-y-auto custom-scrollbar">
-        <div className="flex items-center justify-between px-2 mb-3">
+        
+        {/* Section Header */}
+        <div className="px-2 mb-3">
           <span className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider flex items-center gap-1.5 font-mono">
             <Layers size={13} className="text-lime-400" />
             Categorias
-          </span>
-          <span className="text-[10px] px-2 py-0.5 rounded-full bg-white/5 border border-white/10 text-gray-400 font-mono">
-            {mockTopics.length}
           </span>
         </div>
         
         <nav className="flex flex-col space-y-2">
           {mockTopics.map((topic) => {
             const isSelected = selectedTopicId === topic.id;
+
             return (
               <button
                 key={topic.id}
                 onClick={() => onSelectTopic(topic)}
-                className={`relative flex items-center justify-between w-full text-left px-3.5 py-3 rounded-2xl transition-all duration-300 group
+                className={`relative flex items-center w-full text-left px-3.5 py-3 rounded-2xl transition-all duration-300 group
                   ${isSelected 
-                    ? 'bg-gradient-to-r from-lime-500/20 via-lime-500/10 to-transparent text-white border border-lime-500/40 shadow-[0_0_20px_rgba(57,255,20,0.15)] backdrop-blur-md' 
+                    ? 'bg-gradient-to-r from-lime-500/25 via-lime-500/10 to-transparent text-white border border-lime-500/40 shadow-[0_0_20px_rgba(57,255,20,0.15)] backdrop-blur-md' 
                     : 'text-gray-400 hover:text-white hover:bg-white/5 border border-transparent'
                   }`}
               >
@@ -60,31 +65,23 @@ export function Sidebar({ selectedTopicId, onSelectTopic }: SidebarProps) {
                   <span className="absolute left-0 top-1/2 -translate-y-1/2 w-1.5 h-6 bg-[var(--color-lime-neon)] rounded-r-full shadow-[0_0_12px_rgba(57,255,20,0.9)]"></span>
                 )}
 
-                <div className="flex items-center min-w-0 space-x-3">
+                <div className="flex items-center space-x-3">
                   <span className={`p-2 rounded-xl transition-all ${
                     isSelected 
                       ? 'bg-lime-500/20 text-[var(--color-lime-neon)] border border-lime-500/40' 
                       : 'bg-white/5 text-gray-400 group-hover:text-white group-hover:bg-white/10'
                   }`}>
-                    {iconMap[topic.icon]}
+                    {iconMap[topic.icon] || <Terminal size={18} />}
                   </span>
                   <span className="font-medium text-sm truncate tracking-tight">{topic.title}</span>
                 </div>
-
-                <span className={`text-[10px] font-mono px-2 py-0.5 rounded-full transition-all ${
-                  isSelected 
-                    ? 'bg-lime-500/30 text-lime-200 border border-lime-500/50' 
-                    : 'bg-black/40 text-gray-500 group-hover:text-gray-300'
-                }`}>
-                  {topic.vulnerabilities.length}
-                </span>
               </button>
             );
           })}
         </nav>
       </div>
       
-      {/* iOS Floating Footer */}
+      {/* iOS Footer */}
       <div className="p-4 border-t border-white/10 text-center text-[11px] text-gray-500 backdrop-blur-md rounded-b-3xl">
         <span className="text-gray-300 font-mono">Pé na Porta</span> &copy; {new Date().getFullYear()}
       </div>
