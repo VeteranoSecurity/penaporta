@@ -97,7 +97,17 @@ export function PlaygroundPanel({ vulnerability, onClose }: PlaygroundPanelProps
       );
     }
 
-    if (vulnerability.id === 'sqli-2') {
+    const urlScenarios: Record<string, { url: string, param: string, placeholder: string, desc: string }> = {
+      'sqli-2': { url: 'https://loja-fake.com/api/items?category=', param: 'category', placeholder: 'shoes', desc: 'Teste o atraso do banco de dados injetando comandos SLEEP no parâmetro da URL.' },
+      'sqli-4': { url: 'https://loja-fake.com/product?id=', param: 'id', placeholder: '5', desc: 'Injete funções que quebram o XML do MySQL para forçar um erro na tela.' },
+      'sqli-5': { url: 'https://loja-fake.com/search?q=', param: 'q', placeholder: '5', desc: 'Teste condições Booleanas invisíveis (AND 1=1 vs AND 1=2).' },
+      'sqli-6': { url: 'https://loja-fake.com/profile?id=', param: 'id', placeholder: '-1', desc: 'Use UNION SELECT para equilibrar colunas e vazar tabelas do information_schema.' },
+      'sqli-7': { url: 'https://loja-fake.com/users?sort=', param: 'sort', placeholder: 'ASC', desc: 'Injete um CASE WHEN na ordenação para bypassar a restrição de SELECTs diretos.' },
+      'sqli-10': { url: 'https://loja-fake.com/api/data?q=', param: 'q', placeholder: '', desc: 'Bypass o WAF enviando URL Encoding e /**/ no lugar dos espaços limpos bloqueados.' }
+    };
+
+    if (urlScenarios[vulnerability.id]) {
+      const config = urlScenarios[vulnerability.id];
       return (
         <form onSubmit={handleTest} className="max-w-md mx-auto w-full mt-6 space-y-4">
            <div className="bg-[#111] border border-[#333] rounded-lg overflow-hidden flex flex-col">
@@ -109,18 +119,18 @@ export function PlaygroundPanel({ vulnerability, onClose }: PlaygroundPanelProps
                  </div>
                  <div className="flex-1 bg-black/50 border border-[#333] rounded px-2 py-1 text-xs text-gray-400 font-mono flex items-center overflow-hidden">
                     <Globe size={12} className="mr-2 text-gray-500 flex-shrink-0" />
-                    <span className="truncate">https://loja-fake.com/api/items?category=</span>
+                    <span className="truncate">{config.url}</span>
                  </div>
               </div>
               <div className="p-4 space-y-4 bg-[#0a0a0a]">
-                <p className="text-xs text-gray-400">Teste o atraso do banco de dados injetando comandos SLEEP no parâmetro da URL.</p>
+                <p className="text-xs text-gray-400">{config.desc}</p>
                 <div className="flex flex-col space-y-2">
-                  <label className="text-xs text-[var(--color-cyan-neon)] font-semibold uppercase">Parâmetro: category</label>
+                  <label className="text-xs text-[var(--color-cyan-neon)] font-semibold uppercase">Parâmetro: {config.param}</label>
                   <input 
                     type="text" 
                     value={inputValue}
                     onChange={(e) => setInputValue(e.target.value)}
-                    placeholder={`shoes${vulnerability.payload}`}
+                    placeholder={`${config.placeholder}${vulnerability.payload}`}
                     className="w-full bg-black border border-[#333] rounded px-3 py-2 text-[var(--color-lime-neon)] font-mono text-sm focus:border-[var(--color-cyan-neon)] focus:outline-none transition-all placeholder-gray-700"
                   />
                 </div>
@@ -132,6 +142,82 @@ export function PlaygroundPanel({ vulnerability, onClose }: PlaygroundPanelProps
                 >
                   {isLoading ? <Loader2 size={16} className="animate-spin mr-2" /> : <PlayCircle size={16} className="mr-2" />}
                   {isLoading ? 'Aguardando Servidor...' : 'Enviar Requisição'}
+                </button>
+              </div>
+           </div>
+        </form>
+      );
+    }
+
+    if (vulnerability.id === 'sqli-8') {
+      return (
+        <form onSubmit={handleTest} className="max-w-md mx-auto w-full mt-6 space-y-4">
+           <div className="bg-[#111] border border-[#333] rounded-lg overflow-hidden flex flex-col">
+              <div className="bg-[#1a1a1a] border-b border-[#333] px-3 py-2 flex items-center justify-between">
+                 <span className="text-xs font-bold text-orange-400 uppercase tracking-widest">POST Request (JSON Body)</span>
+                 <span className="text-xs text-gray-500">api/login</span>
+              </div>
+              <div className="p-4 bg-[#0a0a0a]">
+                <p className="text-xs text-gray-400 mb-3">O WAF não bloqueou o Payload pelo fato de estar trafegando em Formato JSON Raw.</p>
+                <div className="bg-black border border-[#333] rounded p-3 font-mono text-sm text-[var(--color-lime-neon)]">
+                  <span className="text-gray-500">{"{"}</span>
+                  <div className="pl-4">
+                    <span className="text-[var(--color-cyan-neon)]">"username"</span><span className="text-gray-500">: "</span>
+                    <input 
+                      type="text" 
+                      value={inputValue}
+                      onChange={(e) => setInputValue(e.target.value)}
+                      placeholder={vulnerability.payload}
+                      className="bg-transparent border-b border-dashed border-gray-600 focus:border-[var(--color-lime-neon)] outline-none text-[var(--color-lime-neon)] w-24 placeholder-gray-700"
+                    />
+                    <span className="text-gray-500">",</span>
+                  </div>
+                  <div className="pl-4">
+                    <span className="text-[var(--color-cyan-neon)]">"password"</span><span className="text-gray-500">: ""</span>
+                  </div>
+                  <span className="text-gray-500">{"}"}</span>
+                </div>
+                {errorMsg && <p className="text-red-500 text-xs opacity-80 mt-3">{errorMsg}</p>}
+                <button 
+                  type="submit" 
+                  disabled={isLoading || !inputValue}
+                  className="w-full bg-orange-500/10 text-orange-500 border border-orange-500/30 font-bold py-2 px-4 rounded hover:bg-orange-500/20 transition-colors disabled:opacity-50 flex items-center justify-center mt-4"
+                >
+                  {isLoading ? <Loader2 size={16} className="animate-spin mr-2" /> : <PlayCircle size={16} className="mr-2" />}
+                  {isLoading ? 'Enviando...' : 'Submeter JSON'}
+                </button>
+              </div>
+           </div>
+        </form>
+      );
+    }
+
+    if (vulnerability.id === 'sqli-9') {
+      return (
+        <form onSubmit={handleTest} className="max-w-md mx-auto w-full mt-6 space-y-4">
+           <div className="bg-[#111] border border-[#333] rounded-lg overflow-hidden flex flex-col">
+              <div className="bg-[#1a1a1a] border-b border-[#333] px-3 py-2 flex items-center justify-between">
+                 <span className="text-xs font-bold text-blue-400 uppercase tracking-widest">Painel Secundário - Alterar Perfil</span>
+              </div>
+              <div className="p-4 bg-[#0a0a0a] space-y-4">
+                <p className="text-xs text-gray-400">Você já se cadastrou previamente com o username infectado. Agora, atualize seu e-mail para engatilhar a injeção em background (Second Order).</p>
+                
+                <div className="space-y-1 opacity-70">
+                  <label className="text-xs text-gray-500 uppercase font-semibold">User Logado Atual (Sujo)</label>
+                  <input type="text" value={inputValue || "admin'--"} onChange={(e) => setInputValue(e.target.value)} placeholder="admin'--" className="w-full bg-black border border-red-900/50 rounded px-3 py-2 text-red-500 font-mono text-sm focus:outline-none" />
+                </div>
+                <div className="space-y-1">
+                  <label className="text-xs text-gray-500 uppercase font-semibold">Novo E-mail</label>
+                  <input type="text" value="attacker@hacker.com" disabled className="w-full bg-[#111] border border-[#333] rounded px-3 py-2 text-gray-500 cursor-not-allowed font-mono text-sm focus:outline-none" />
+                </div>
+                
+                {errorMsg && <p className="text-red-500 text-xs opacity-80 mt-3">{errorMsg}</p>}
+                <button 
+                  type="submit" 
+                  disabled={isLoading || !inputValue}
+                  className="w-full bg-blue-500/10 text-blue-400 border border-blue-500/30 font-bold py-2 px-4 rounded hover:bg-blue-500/20 transition-colors disabled:opacity-50 flex items-center justify-center mt-4"
+                >
+                  {isLoading ? <Loader2 size={16} className="animate-spin mr-2" /> : 'Atualizar Dados (Gatilho)'}
                 </button>
               </div>
            </div>
@@ -235,50 +321,126 @@ export function PlaygroundPanel({ vulnerability, onClose }: PlaygroundPanelProps
     }
 
     return (
-      <div className="flex-1 flex flex-col items-center justify-center text-center animate-in zoom-in-95 duration-500 space-y-4">
-         <div className="w-20 h-20 rounded-full bg-green-500/20 flex items-center justify-center mb-4">
-            <CheckCircle2 size={48} className="text-green-500 drop-shadow-[0_0_15px_rgba(34,197,94,0.8)]" />
-         </div>
-         
-         {vulnerability.id === 'sqli-2' ? (
+      <div className="flex-1 flex flex-col w-full h-full justify-center items-center text-center animate-in zoom-in-95 duration-500 space-y-4">
+        
+        {vulnerability.id === 'sqli-4' && (
+          <div className="bg-red-950/20 border border-red-900 p-4 rounded-lg w-full text-left font-mono">
+             <h2 className="text-red-500 font-bold mb-2">Uncaught DatabaseException:</h2>
+             <p className="text-red-400 text-xs break-all">
+                SQLSTATE[HY000]: General error: 1105 XPATH syntax error: <br/>
+                <span className="text-white font-bold bg-red-900 px-1">'~10.4.22-MariaDB'</span>
+             </p>
+             <p className="text-gray-500 text-xs mt-4">✓ Você forçou um erro que vazou a versão do servidor.</p>
+          </div>
+        )}
+
+        {vulnerability.id === 'sqli-5' && (
+           <div className="bg-green-900/20 p-4 rounded-lg w-full">
+             <h2 className="text-3xl font-bold text-green-400 mb-2">Página Carregada!</h2>
+             <p className="text-gray-400 text-sm">A expressão injetada resultou em <span className="text-green-500 font-bold">TRUE</span>. A aplicação não deu erro e retornou o conteúdo normalmente, provando que a primeira letra do DB é 'r'.</p>
+           </div>
+        )}
+
+        {vulnerability.id === 'sqli-6' && (
+           <div className="bg-[#111] border border-[#333] p-4 rounded-lg w-full text-left">
+             <h2 className="text-green-500 font-bold text-sm mb-3">Retorno Refletido (Data Leak)</h2>
+             <div className="grid grid-cols-3 gap-2 text-xs text-gray-400 border-b border-[#222] pb-2 mb-2 font-bold uppercase tracking-wider">
+               <span>P_ID</span><span>P_NAME</span><span>P_DESC</span>
+             </div>
+             <div className="grid grid-cols-3 gap-2 text-sm text-[var(--color-cyan-neon)] font-mono">
+               <span>1</span><span className="text-[var(--color-lime-neon)] font-bold">users_table</span><span>3</span>
+             </div>
+             <p className="text-gray-500 text-xs mt-4">✓ A injeção UNION mesclou a sua query com a original.</p>
+           </div>
+        )}
+
+        {vulnerability.id === 'sqli-7' && (
+           <div className="bg-[#111] border border-[#333] p-4 rounded-lg w-full text-left">
+             <h2 className="text-[var(--color-lime-neon)] font-bold text-sm mb-3">Tabela Ordenada Condicionalmente</h2>
+             <div className="text-xs text-gray-400 space-y-2">
+               <div className="bg-white/5 p-2 rounded">1. ⚡ admin (ID: 1)</div>
+               <div className="bg-white/5 p-2 rounded">2. 👤 john (ID: 5)</div>
+               <div className="bg-white/5 p-2 rounded">3. 👤 maria (ID: 9)</div>
+             </div>
+             <p className="text-gray-500 text-[10px] mt-4">Como a clausula (1=1) foi TRUE, a listagem do aplicativo foi ordenada pelo NOME e não pelas ID's ou Preços normais.</p>
+           </div>
+        )}
+
+        {vulnerability.id === 'sqli-8' && (
+           <div className="bg-[#050505] border border-[var(--color-hacker-border)] p-4 rounded-lg w-full text-left font-mono">
+             <p className="text-green-400 mb-2">200 OK</p>
+             <pre className="text-[var(--color-lime-neon)] text-xs">
+{`{
+  "status": "success",
+  "message": "Auth ByPassed via JSON injection",
+  "token": "eyJhbGciOiJIUzI...w"
+}`}
+             </pre>
+           </div>
+        )}
+
+        {vulnerability.id === 'sqli-9' && (
+           <div className="bg-blue-900/10 border border-blue-500/30 p-4 rounded-lg w-full text-left text-blue-400">
+             <CheckCircle2 size={32} className="mb-2 text-blue-500" />
+             <h2 className="font-bold mb-2">Bomb Logic Executed</h2>
+             <p className="text-sm">O sistema foi atualizar os dados do seu usuário: <code className="bg-black px-1 rounded">WHERE user='admin'--'</code>.</p>
+             <p className="text-xs text-gray-400 mt-2">A query engoliu a restrição de ID do WHERE via comentário, e atualizou a Senha de TODA a tabela, ou apenas do primeiro Admin!</p>
+           </div>
+        )}
+
+        {vulnerability.id === 'sqli-10' && (
+           <div className="bg-orange-900/10 border border-orange-500/30 p-4 rounded-lg w-full text-left text-orange-400">
+             <h2 className="font-bold mb-2 text-orange-500">WAF Bypassed!</h2>
+             <p className="text-sm">O firewall visualizou apenas `%55nIoN/**/%53eLeCt` em sua request, não deu match na expressão regular <code>/UNION SELECT/</code> e liberou pra dentro da rede!</p>
+             <p className="text-xs text-[var(--color-lime-neon)] mt-3">{"[ Dados Extraídos com Sucesso ]"}</p>
+           </div>
+        )}
+
+        {/* Fallbacks Formatos Antigos */}
+        {(vulnerability.id === 'sqli-1' || vulnerability.id === 'sqli-3') && (
            <>
-             <h2 className="text-2xl font-bold text-green-400">Delay Detectado!</h2>
-             <p className="text-gray-400 text-sm max-w-[250px]">A requisição demorou os 5 segundos estipulados no SLEEP(). Logo, o banco de dados está vulnerável a Time-Based Blind.</p>
-           </>
-         ) : vulnerability.id === 'sqli-1' || vulnerability.id === 'sqli-3' ? (
-           <>
+             <div className="w-20 h-20 rounded-full bg-green-500/20 flex items-center justify-center mb-4">
+                <CheckCircle2 size={48} className="text-green-500 drop-shadow-[0_0_15px_rgba(34,197,94,0.8)]" />
+             </div>
              <h2 className="text-2xl font-bold text-green-400">Login Feito com Sucesso!</h2>
              <p className="text-gray-400 text-sm max-w-[250px]">O ambiente vulnerável aceitou seu payload no banco de dados e o acesso como admin foi liberado.</p>
            </>
-         ) : (
-           <>
-             <h2 className="text-2xl font-bold text-green-400">Payload Executado!</h2>
-             <p className="text-gray-400 text-sm max-w-[250px]">O ambiente executou a injeção com sucesso no processo alvo.</p>
-           </>
-         )}
+        )}
 
-         <button 
-           onClick={() => { setIsSuccess(false); setInputValue(''); }}
-           className="mt-6 text-sm text-[var(--color-cyan-neon)] hover:underline"
-         >
-           Testar Novamente
-         </button>
+        {vulnerability.id === 'sqli-2' && (
+           <>
+             <div className="w-20 h-20 rounded-full bg-green-500/20 flex items-center justify-center mb-4">
+                <CheckCircle2 size={48} className="text-green-500 drop-shadow-[0_0_15px_rgba(34,197,94,0.8)]" />
+             </div>
+             <h2 className="text-2xl font-bold text-green-400">Delay Detectado!</h2>
+             <p className="text-gray-400 text-sm max-w-[250px]">A requisição demorou os 5 segundos estipulados no SLEEP(). Logo, o banco de dados está vulnerável a Time-Based Blind.</p>
+           </>
+        )}
+
+        <button 
+          onClick={() => { setIsSuccess(false); setInputValue(''); }}
+          className="mt-6 text-sm text-[var(--color-cyan-neon)] hover:underline"
+        >
+          Testar Novamente
+        </button>
       </div>
     );
   };
 
   return (
-    <aside className="w-full lg:w-[400px] flex-shrink-0 bg-[#080808] border-l border-[#222] h-full overflow-y-auto relative z-30 flex flex-col shadow-2xl animate-in slide-in-from-right-8 duration-300 custom-scrollbar">
+    <aside className="fixed top-0 right-0 bottom-0 w-full lg:w-[440px] flex-shrink-0 glass-panel border-l border-white/10 h-full overflow-y-auto z-40 flex flex-col shadow-[0_0_60px_rgba(0,0,0,0.8)] animate-in slide-in-from-right-8 duration-300 custom-scrollbar backdrop-blur-2xl">
       
       {/* Header */}
-      <div className="p-4 border-b border-[#222] flex items-center justify-between bg-black sticky top-0 z-10">
-        <h3 className="font-bold text-white flex items-center">
-          <PlayCircle size={18} className="mr-2 text-[var(--color-cyan-neon)]" />
-          Playground
+      <div className="p-5 border-b border-white/10 flex items-center justify-between bg-black/40 backdrop-blur-md sticky top-0 z-10">
+        <h3 className="font-bold text-white flex items-center text-lg tracking-tight">
+          <span className="p-1.5 rounded-lg bg-lime-500/20 text-[var(--color-lime-neon)] mr-2.5 border border-lime-500/30">
+            <PlayCircle size={18} />
+          </span>
+          Playground Interativo
         </h3>
         <button 
           onClick={onClose}
-          className="text-gray-500 hover:text-white transition-colors p-1"
+          className="text-gray-400 hover:text-white p-2 rounded-full hover:bg-white/10 transition-all"
         >
           <X size={20} />
         </button>
@@ -287,16 +449,16 @@ export function PlaygroundPanel({ vulnerability, onClose }: PlaygroundPanelProps
       {/* Content */}
       <div className="p-6 flex-1 flex flex-col">
         <div className="mb-6">
-          <span className="text-[10px] uppercase font-bold text-[var(--color-cyan-neon)] tracking-wider bg-[var(--color-cyan-neon)]/10 px-2 py-1 rounded inline-block mb-2 flex-auto w-max">
+          <span className="text-[10px] uppercase font-bold text-[var(--color-lime-neon)] tracking-wider bg-lime-500/15 border border-lime-500/30 px-3 py-1 rounded-full inline-block mb-3 font-mono">
              Simulação Ativa
           </span>
-          <h4 className="text-xl font-bold text-white mb-2">{vulnerability.title}</h4>
+          <h4 className="text-2xl font-bold text-white mb-2 tracking-tight">{vulnerability.title}</h4>
           
           {/* Simulation Hint */}
           {vulnerability.hint_simulation && (
-             <div className="bg-orange-500/10 border border-orange-500/30 p-3 rounded text-sm text-gray-300 mt-2 mb-4">
-               <strong className="text-orange-500 flex items-center text-xs uppercase mb-1">
-                 <ShieldAlert size={14} className="mr-1" /> Dica de Reconhecimento
+             <div className="bg-orange-500/10 border border-orange-500/30 p-4 rounded-2xl text-sm text-gray-200 mt-3 mb-4 backdrop-blur-md">
+               <strong className="text-orange-400 flex items-center text-xs uppercase mb-1.5 tracking-wider font-semibold">
+                 <ShieldAlert size={14} className="mr-1.5 text-orange-400" /> Dica de Reconhecimento
                </strong>
                {vulnerability.hint_simulation}
              </div>
