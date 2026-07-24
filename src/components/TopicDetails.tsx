@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ChevronLeft, Copy, Check, Terminal, PlayCircle, Target, Download } from 'lucide-react';
+import { Copy, Check, Terminal, PlayCircle, Target, Download } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import type { Topic, Vulnerability } from '../data/mockData';
 
@@ -11,7 +11,6 @@ interface TopicDetailsProps {
 
 export function TopicDetails({
   topic,
-  onBack,
   onTest
 }: TopicDetailsProps) {
   const [copiedId, setCopiedId] = useState<string | null>(null);
@@ -77,16 +76,8 @@ export function TopicDetails({
   return (
     <div className="max-w-5xl mx-auto w-full space-y-6">
       
-      {/* Action Navigation Bar */}
-      <div className="flex items-center justify-between flex-wrap gap-4">
-        <button 
-          onClick={onBack}
-          className="glass-button glass-button-lime inline-flex items-center text-lime-300 px-5 py-2.5 rounded-full font-bold uppercase tracking-wider text-xs transition-all duration-300 group shadow-lg"
-        >
-          <ChevronLeft size={16} className="mr-1.5 transform group-hover:-translate-x-1 transition-transform" />
-          Voltar para Categorias
-        </button>
-
+      {/* Action Navigation Bar (Export Cheatsheet) */}
+      <div className="flex items-center justify-end flex-wrap gap-4">
         {/* Download Cheatsheet Button */}
         <button
           onClick={handleExportCheatsheet}
@@ -108,196 +99,114 @@ export function TopicDetails({
       </div>
 
       {/* Centered Header Glass Banner */}
-      <div className="glass-panel rounded-3xl p-8 md:p-10 border border-white/10 relative overflow-hidden text-center flex flex-col items-center">
-        <div className="absolute top-0 right-1/2 translate-x-1/2 w-96 h-96 bg-gradient-to-b from-lime-500/10 to-transparent rounded-full blur-3xl pointer-events-none"></div>
-        <h2 className="text-3xl md:text-4xl font-extrabold text-white mb-2.5 tracking-tight drop-shadow-[0_0_15px_rgba(255,255,255,0.15)] text-center">
+      <div className="glass-panel rounded-3xl p-8 relative overflow-hidden text-center flex flex-col items-center justify-center border border-white/15 shadow-2xl backdrop-blur-2xl">
+        <div className="absolute -top-20 left-1/2 -translate-x-1/2 w-80 h-80 bg-lime-500/10 rounded-full blur-3xl pointer-events-none"></div>
+        
+        <span className="text-xs font-mono px-3.5 py-1 rounded-full bg-lime-500/15 border border-lime-500/30 text-[var(--color-lime-neon)] font-semibold mb-3">
+          {topic.vulnerabilities.length} módulos disponíveis
+        </span>
+
+        <h2 className="text-3xl md:text-4xl font-extrabold text-white mb-3 tracking-tight">
           {topic.title}
         </h2>
-        <p className="text-gray-300 text-sm md:text-base max-w-2xl text-center">{topic.description}</p>
+        <p className="text-gray-300 text-sm max-w-2xl leading-relaxed text-center">
+          {topic.description}
+        </p>
       </div>
 
-      {/* Vulnerabilities List in iOS Glass Cards */}
+      {/* Vulnerabilities List Cards */}
       <div className="space-y-6">
-        {topic.vulnerabilities.map((vuln: Vulnerability) => {
-          return (
-            <div 
-              key={vuln.id} 
-              className="glass-panel rounded-3xl overflow-hidden flex flex-col border border-white/10 shadow-[0_15px_40px_rgba(0,0,0,0.5)]"
-            >
-              
-              {/* Header info */}
-              <div className="p-6 md:p-7 border-b border-white/10 bg-white/[0.01]">
-                <div className="flex items-center justify-between flex-wrap gap-3 mb-4">
-                  <h3 className="text-xl md:text-2xl font-bold text-white flex items-center tracking-tight">
-                    <span className="p-2 rounded-xl bg-lime-500/15 border border-lime-500/30 text-[var(--color-lime-neon)] mr-3">
-                      <Terminal size={20} />
-                    </span>
-                    {vuln.title}
-                  </h3>
-
-                  <div className="flex items-center space-x-3">
+        {topic.vulnerabilities.map((vuln, index) => (
+          <div 
+            key={vuln.id} 
+            className="glass-card rounded-3xl p-6 md:p-8 space-y-6 relative overflow-hidden group border border-white/15 hover:border-lime-500/40 transition-all duration-300 shadow-xl"
+          >
+            {/* Header: Title + Difficulty Badge + Action Buttons */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/10 pb-5">
+              <div className="flex items-center space-x-3">
+                <span className="w-8 h-8 rounded-xl bg-lime-500/20 text-[var(--color-lime-neon)] font-mono font-bold text-sm flex items-center justify-center border border-lime-500/40">
+                  {index + 1}
+                </span>
+                <div>
+                  <div className="flex items-center space-x-2">
+                    <h3 className="text-xl font-extrabold text-white tracking-tight">{vuln.title}</h3>
                     {getDifficultyBadge(vuln.difficulty)}
-
-                    <button 
-                      onClick={() => onTest(vuln)}
-                      className="glass-button glass-button-lime flex items-center text-xs font-bold text-emerald-300 px-4 py-2 rounded-full transition-all"
-                    >
-                      <PlayCircle size={15} className="mr-1.5" />
-                      Testar
-                    </button>
                   </div>
+                  <p className="text-xs text-gray-400 mt-1 font-mono">{vuln.scenario}</p>
+                </div>
+              </div>
+
+              <button
+                onClick={() => onTest(vuln)}
+                className="glass-button glass-button-lime inline-flex items-center justify-center px-4 py-2 rounded-xl text-xs font-bold text-black transition-all shadow-md self-start sm:self-auto"
+              >
+                <PlayCircle size={15} className="mr-1.5" />
+                Simular no Playground
+              </button>
+            </div>
+
+            {/* Mindset & Reconnaissance Guide */}
+            {vuln.mindset_why && (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="bg-lime-500/10 border border-lime-500/25 p-4 rounded-2xl text-xs text-lime-200 backdrop-blur-md">
+                  <span className="font-bold text-lime-400 uppercase font-mono tracking-wider flex items-center gap-1.5 mb-1.5">
+                    <Target size={14} /> Guia de Mindset do Hacker:
+                  </span>
+                  <p className="leading-relaxed text-gray-300">{vuln.mindset_why}</p>
                 </div>
 
-                <p className="text-sm text-gray-300 mb-4 leading-relaxed">
-                  <strong className="text-white font-semibold">Cenário Básico:</strong> {vuln.scenario}
-                </p>
-                
-                {/* Example block with React Markdown */}
-                {vuln.example && (
-                  <div className="text-sm text-gray-200 bg-black/60 p-4 rounded-2xl border border-white/10 prose prose-invert max-w-none prose-sm leading-relaxed mb-4 backdrop-blur-md">
-                    <ReactMarkdown 
-                      components={{
-                        code({node, className, children, ...props}: any) {
-                          return (
-                            <code className="text-[var(--color-lime-neon)] bg-black/80 px-2 py-0.5 rounded-lg text-xs font-mono border border-lime-500/30" {...props}>
-                              {children}
-                            </code>
-                          );
-                        }
-                      }}
-                    >
-                      {vuln.example}
-                    </ReactMarkdown>
-                  </div>
-                )}
-
-                {/* Educational Sections (Collapsible iOS Accordion) */}
-                {(vuln.recon_summary || vuln.mindset_goal) && (
-                  <div className="mt-4 flex flex-col gap-3">
-                    {/* Recon / Red Flag Section */}
-                    {vuln.recon_summary && (
-                      <details className="group border border-amber-500/30 bg-amber-950/20 rounded-2xl outline-none [&_summary::-webkit-details-marker]:hidden backdrop-blur-md">
-                        <summary className="text-amber-400 font-bold flex items-center justify-between p-4 cursor-pointer select-none rounded-2xl hover:bg-amber-500/10 transition-colors">
-                          <div className="flex items-center uppercase tracking-wider text-xs">
-                            <span className="relative flex h-2.5 w-2.5 mr-3">
-                              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
-                              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-amber-500"></span>
-                            </span>
-                            Identificação do Alvo
-                          </div>
-                          <ChevronLeft size={16} className="transform group-open:-rotate-90 transition-transform text-amber-400" />
-                        </summary>
-                        <div className="px-5 pb-5 pt-1 border-t border-amber-500/20 mt-1">
-                          <p className="text-sm text-gray-300 mb-4 mt-3">{vuln.recon_summary}</p>
-                          
-                          {vuln.visual_pattern && (
-                            <div className="bg-black/80 rounded-xl p-4 font-mono text-sm border border-white/10 overflow-x-auto text-gray-300">
-                              {vuln.visual_pattern.split('\n').map((line, i) => (
-                                <div key={i}>
-                                  {line.split(/(\[!!!.*?!!!\])/).map((part, j) => {
-                                    if (part.startsWith('[!!!') && part.endsWith('!!!]')) {
-                                      const highlight = part.replace(/\[!!!|!!!\]/g, '');
-                                      return <span key={j} className="text-amber-300 bg-amber-500/20 border border-amber-500/40 px-1.5 py-0.5 rounded-md font-bold">{highlight}</span>;
-                                    }
-                                    return <span key={j}>{part}</span>;
-                                  })}
-                                </div>
-                              ))}
-                            </div>
-                          )}
-                        </div>
-                      </details>
-                    )}
-
-                    {/* Attacker Mindset Section */}
-                    {vuln.mindset_goal && (
-                      <details className="group border border-emerald-500/30 bg-emerald-950/20 rounded-2xl outline-none [&_summary::-webkit-details-marker]:hidden backdrop-blur-md">
-                        <summary className="text-emerald-300 font-bold flex items-center justify-between p-4 cursor-pointer select-none rounded-2xl hover:bg-emerald-900/30 transition-colors">
-                          <div className="flex items-center uppercase tracking-wider text-xs">
-                            <Target size={15} className="mr-2 text-emerald-400" />
-                            <span>Guia do Iniciante (Mindset)</span>
-                          </div>
-                          <ChevronLeft size={16} className="transform group-open:-rotate-90 transition-transform text-emerald-400" />
-                        </summary>
-                        <div className="px-5 pb-5 pt-1 border-t border-emerald-500/20 mt-1">
-                          <div className="space-y-4 mt-3">
-                            <div>
-                              <h5 className="text-emerald-300 text-xs font-semibold mb-1 uppercase opacity-90">Nosso Objetivo:</h5>
-                              <p className="text-sm text-gray-300">{vuln.mindset_goal}</p>
-                            </div>
-                            
-                            {vuln.mindset_why && (
-                              <div>
-                                <h5 className="text-emerald-300 text-xs font-semibold mb-1 uppercase opacity-90">Por que testar assim?</h5>
-                                <p className="text-sm text-gray-300 leading-relaxed italic border-l-2 border-emerald-500/40 pl-3">
-                                  "{vuln.mindset_why}"
-                                </p>
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                      </details>
-                    )}
+                {vuln.visual_pattern && (
+                  <div className="bg-white/5 border border-white/10 p-4 rounded-2xl text-xs text-gray-300 backdrop-blur-md">
+                    <span className="font-bold text-gray-400 uppercase font-mono tracking-wider flex items-center gap-1.5 mb-1.5">
+                      <Terminal size={14} /> Padrão Visual no Recon:
+                    </span>
+                    <p className="leading-relaxed text-gray-300">{vuln.visual_pattern}</p>
                   </div>
                 )}
               </div>
+            )}
 
-              {/* Payload Area with Gel Glass Box */}
-              <div className="p-6 bg-black/70 relative group backdrop-blur-md">
-                <div className="text-xs text-gray-400 mb-2.5 uppercase tracking-wider font-semibold">Payload Rápido</div>
-                <pre className="text-[var(--color-lime-neon)] font-mono text-sm overflow-x-auto p-4 bg-black/90 rounded-2xl border border-white/10 shadow-inner">
-                  <code>{vuln.payload}</code>
-                </pre>
+            {/* Payload Box */}
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider font-mono">Payload de Exemplo</span>
                 <button
                   onClick={() => handleCopy(vuln.id, vuln.payload)}
-                  className="absolute top-[48px] right-8 p-2.5 glass-button rounded-xl text-gray-200 transition-all opacity-0 group-hover:opacity-100 focus:opacity-100 shadow-lg"
-                  title="Copiar Payload"
+                  className="text-xs text-gray-400 hover:text-white flex items-center gap-1 transition-colors font-mono"
                 >
-                  {copiedId === vuln.id ? <Check size={18} className="text-emerald-400" /> : <Copy size={18} />}
+                  {copiedId === vuln.id ? (
+                    <>
+                      <Check size={13} className="text-emerald-400" />
+                      <span className="text-emerald-400 font-bold">Copiado!</span>
+                    </>
+                  ) : (
+                    <>
+                      <Copy size={13} />
+                      <span>Copiar Payload</span>
+                    </>
+                  )}
                 </button>
               </div>
 
-              {/* Markdown Expandable Result */}
-              {vuln.result && (
-                <details className="group border-t border-white/10 bg-white/[0.01] outline-none">
-                  <summary className="text-sm font-semibold text-[var(--color-lime-neon)] cursor-pointer select-none list-none flex items-center p-5 hover:bg-white/5 transition-colors">
-                     <ChevronLeft size={16} className="mr-2 transform group-open:-rotate-90 transition-transform" />
-                     Ver Resultado / Resposta Esperada
-                  </summary>
-                  <div className="px-6 pb-6 pt-2 border-t border-white/10">
-                    <div className="text-sm text-gray-200 bg-black/80 rounded-2xl p-5 border border-white/10 shadow-inner prose prose-invert max-w-none prose-sm backdrop-blur-md">
-                      <ReactMarkdown 
-                        components={{
-                          code({node, inline, className, children, ...props}: any) {
-                            const match = /language-(\w+)/.exec(className || '');
-                            return !inline ? (
-                              <div className="mt-2 mb-2">
-                                {match && <div className="text-[10px] text-gray-400 uppercase px-3 py-1 bg-white/10 rounded-t-xl inline-block border-t border-l border-r border-white/10 font-mono">{match[1]}</div>}
-                                <pre className={`p-4 bg-black/95 rounded-b-2xl rounded-tr-2xl overflow-x-auto border border-white/10 text-gray-200 font-mono block ${!match ? 'rounded-tl-2xl' : ''}`}>
-                                  <code className={className} {...props}>
-                                    {children}
-                                  </code>
-                                </pre>
-                              </div>
-                            ) : (
-                              <code className="text-gray-200 bg-white/10 px-2 py-0.5 rounded-md font-mono text-xs border border-white/10" {...props}>
-                                {children}
-                              </code>
-                            )
-                          }
-                        }}
-                      >
-                        {vuln.result}
-                      </ReactMarkdown>
-                    </div>
-                  </div>
-                </details>
-              )}
-              
+              <div className="bg-black/80 border border-white/15 p-4 rounded-2xl font-mono text-xs text-[var(--color-lime-neon)] overflow-x-auto shadow-inner">
+                <code>{vuln.payload}</code>
+              </div>
             </div>
-          );
-        })}
+
+            {/* Example Markdown Details */}
+            {vuln.example && (
+              <div className="space-y-2 pt-2">
+                <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider font-mono">Detalhamento Técnico</span>
+                <div className="bg-black/40 border border-white/10 p-4 rounded-2xl text-xs text-gray-300 prose prose-invert prose-xs max-w-none backdrop-blur-md">
+                  <ReactMarkdown>{vuln.example}</ReactMarkdown>
+                </div>
+              </div>
+            )}
+
+          </div>
+        ))}
       </div>
+
     </div>
   );
 }

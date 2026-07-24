@@ -47,16 +47,15 @@ Este arquivo gerencia o progresso das funcionalidades, conteúdos e melhorias da
   - [x] Atualizar tokens visuais (`index.css`) com gradientes líquidos, néon suave e sombras em camadas profundas.
   - [x] Animação de recolher/minimizar estilo macOS Genie (`animate-genie-out` / `animate-genie-in`) aplicada nas transições de categorias.
 - [x] **Carrossel 3D macOS Cover Flow em Vidro**: Exibição das 8 categorias na página inicial através de um carrossel 3D destacado em posição de herói (`w-[410px] h-[390px]`), com navegação por setas em vidro, teclado (setas esquerda/direita) e pílulas de paginação translúcidas.
-- [x] **Botão Início Glass Cristalino Lado a Lado com a Busca**: Botão em *Liquid Glass* de altíssima definição (`.glass-button`) com ícone de casinha posicionado no topo ao lado do campo de busca translúcido (`.glass-input`), com desfoque de vidro real `backdrop-blur-2xl` e iluminação néon.
-- [x] **Exportação de Cheatsheet**: Botão para baixar todos os payloads da categoria em arquivo `.md` formatado.
+- [x] **Navegação Simplificada**: Removido o botão redundante `Voltar para Categorias` do topo dos detalhes, mantendo a navegação unificada pelo botão `Início` em vidro ao lado do campo de busca.
+- [x] **Menu Lateral Vidro Translúcido**: Aplicado o efeito *Liquid Glass* de altíssima definição no menu lateral (`Sidebar`), com iluminação bioluminescente `liquid-orb-sidebar` para garantir a translucidez idêntica aos cards principais.
 - [x] **Filtros por Dificuldade**: Badges dinâmicas por nível (*Iniciante*, *Intermediário*, *Avançado*).
 
 ---
 
 ### 3. 🧪 Playground Interativo
-- [ ] **Simulador de XSS**: Sandbox segura para executar e visualmente comprovar execução de payloads JS no playground.
-- [ ] **Simulador de LFI**: Emulador de leitura de arquivos que retorna estruturas `/etc/passwd` dinâmicas.
-- [ ] **Indicadores Visuais de Resposta**: Melhorar feedback gráfico quando o payload digitado for bem-sucedido no teste.
+- [x] **Simulador de Vulnerabilidades**: Sandbox para testar e executar os 80 payloads no playground lateral com simulação de respostas.
+- [x] **Indicadores Visuais de Resposta Universal**: Tela de confirmação gráfica em estilo *iOS Glass* com selo `✓ Exploração Bem-Sucedida!`, exibição do payload executado e log de resposta do servidor garantida para **todas as 80 vulnerabilidades**.
 
 ---
 

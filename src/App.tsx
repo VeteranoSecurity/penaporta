@@ -64,6 +64,7 @@ function App() {
   return (
     <div className="h-screen w-full flex bg-[#050507] text-gray-100 overflow-hidden relative font-sans selection:bg-lime-500/30">
       {/* Liquid Gel ambient glowing orbs */}
+      <div className="liquid-orb-sidebar"></div>
       <div className="liquid-orb-1"></div>
       <div className="liquid-orb-2"></div>
       

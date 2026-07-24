@@ -28,30 +28,30 @@
 
 /* REAL macOS Frosted Glassmorphism Utilities */
 .glass-panel {
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(30px) saturate(210%);
-  -webkit-backdrop-filter: blur(30px) saturate(210%);
-  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%);
+  backdrop-filter: blur(32px) saturate(220%);
+  -webkit-backdrop-filter: blur(32px) saturate(220%);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   box-shadow: 
     0 20px 50px rgba(0, 0, 0, 0.5),
-    inset 0 1px 1.5px 0 rgba(255, 255, 255, 0.35),
+    inset 0 1px 1.5px 0 rgba(255, 255, 255, 0.4),
     inset 0 -1px 2px 0 rgba(0, 0, 0, 0.4);
 }
 
 /* Glass Input Search Bar & Glass Home Button */
 .glass-input {
-  background: rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.07);
   backdrop-filter: blur(30px) saturate(200%);
   -webkit-backdrop-filter: blur(30px) saturate(200%);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.22);
   box-shadow: 
     0 10px 30px rgba(0, 0, 0, 0.5),
-    inset 0 1px 1.5px 0 rgba(255, 255, 255, 0.4);
+    inset 0 1px 1.5px 0 rgba(255, 255, 255, 0.45);
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .glass-input:focus {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.12);
   border-color: rgba(57, 255, 20, 0.6);
   box-shadow: 
     0 0 35px rgba(57, 255, 20, 0.25),
@@ -59,7 +59,7 @@
 }
 
 .glass-button {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.04) 100%);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.14) 0%, rgba(255, 255, 255, 0.04) 100%);
   backdrop-filter: blur(24px) saturate(190%);
   -webkit-backdrop-filter: blur(24px) saturate(190%);
   border: 1px solid rgba(255, 255, 255, 0.22);
@@ -70,7 +70,7 @@
 }
 
 .glass-button:hover {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.22) 0%, rgba(57, 255, 20, 0.12) 100%);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.24) 0%, rgba(57, 255, 20, 0.12) 100%);
   border-color: rgba(57, 255, 20, 0.5);
   box-shadow: 
     0 12px 30px rgba(57, 255, 20, 0.25),
@@ -92,23 +92,23 @@
 }
 
 .glass-card {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.09) 0%, rgba(255, 255, 255, 0.02) 100%);
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   box-shadow: 
     0 15px 35px rgba(0, 0, 0, 0.5),
-    inset 0 1px 1.5px 0 rgba(255, 255, 255, 0.3);
+    inset 0 1px 1.5px 0 rgba(255, 255, 255, 0.35);
   transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .glass-card:hover {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.16) 0%, rgba(57, 255, 20, 0.08) 100%);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.18) 0%, rgba(57, 255, 20, 0.09) 100%);
   border-color: rgba(57, 255, 20, 0.45);
   box-shadow: 
     0 20px 40px rgba(57, 255, 20, 0.2),
     0 0 25px rgba(57, 255, 20, 0.12),
-    inset 0 1px 2px 0 rgba(255, 255, 255, 0.45);
+    inset 0 1px 2px 0 rgba(255, 255, 255, 0.5);
   transform: translateY(-4px) scale(1.02);
 }
 
@@ -176,7 +176,7 @@
   animation: genieIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-/* Floating ambient Liquid Orbs (Increased Vibrancy for Glass Backdrop Blur) */
+/* Floating ambient Liquid Orbs */
 @keyframes floatOrb1 {
   0%, 100% { transform: translate(0, 0) scale(1); }
   50% { transform: translate(70px, 50px) scale(1.2); }
@@ -185,6 +185,19 @@
 @keyframes floatOrb2 {
   0%, 100% { transform: translate(0, 0) scale(1); }
   50% { transform: translate(-60px, -40px) scale(1.15); }
+}
+
+.liquid-orb-sidebar {
+  position: absolute;
+  top: 15%;
+  left: -5%;
+  width: 480px;
+  height: 650px;
+  background: radial-gradient(circle, rgba(57, 255, 20, 0.15) 0%, rgba(255, 255, 255, 0.03) 50%, transparent 75%);
+  filter: blur(95px);
+  pointer-events: none;
+  animation: floatOrb1 20s ease-in-out infinite;
+  z-index: 0;
 }
 
 .liquid-orb-1 {
