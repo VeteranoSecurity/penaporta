@@ -7,9 +7,11 @@ import { HeaderSearch } from './components/HeaderSearch';
 import { CategoryCarousel } from './components/CategoryCarousel';
 import { PixFloatingCard } from './components/PixFloatingCard';
 import { IntroOverlay } from './components/IntroOverlay';
+import { MobileRestrictionModal, useIsMobile } from './components/MobileRestrictionModal';
 import { mockTopics, type Topic, type Vulnerability } from './data/mockData';
 
 function App() {
+  const isMobile = useIsMobile();
   const [selectedTopic, setSelectedTopic] = useState<Topic | null>(null);
   const [testingVuln, setTestingVuln] = useState<Vulnerability | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
@@ -64,10 +66,15 @@ function App() {
     });
   }, [searchQuery]);
 
+  // Priority 1: If mobile device, show restriction screen immediately and bypass intro video
+  if (isMobile) {
+    return <MobileRestrictionModal />;
+  }
+
   return (
     <div className="h-screen w-full flex bg-[#050507] text-gray-100 overflow-hidden relative font-sans selection:bg-lime-500/30">
       
-      {/* Full-Screen Futuristic Intro Animation Overlay */}
+      {/* Full-Screen Futuristic Intro Animation Overlay (Desktop Only) */}
       {!introCompleted && (
         <IntroOverlay onComplete={() => setIntroCompleted(true)} />
       )}
