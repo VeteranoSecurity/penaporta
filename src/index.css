@@ -176,6 +176,23 @@
   animation: genieIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
+/* Search View Smooth Fade-In and Slide-Up Animation */
+@keyframes searchGridEnter {
+  0% {
+    opacity: 0;
+    transform: scale3d(0.96, 0.96, 1) translate3d(0, 16px, 0);
+  }
+  100% {
+    opacity: 1;
+    transform: scale3d(1, 1, 1) translate3d(0, 0, 0);
+  }
+}
+
+.animate-search-grid {
+  will-change: transform, opacity;
+  animation: searchGridEnter 0.42s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
 /* Floating ambient Liquid Orbs */
 @keyframes floatOrb1 {
   0%, 100% { transform: translate(0, 0) scale(1); }

@@ -5,6 +5,7 @@ import { Sidebar } from './components/Sidebar';
 import { PlaygroundPanel } from './components/PlaygroundPanel';
 import { HeaderSearch } from './components/HeaderSearch';
 import { CategoryCarousel } from './components/CategoryCarousel';
+import { PixFloatingCard } from './components/PixFloatingCard';
 import { mockTopics, type Topic, type Vulnerability } from './data/mockData';
 
 function App() {
@@ -79,7 +80,10 @@ function App() {
         />
       </div>
 
-      {/* 2. Main Content Area with macOS Genie transition container */}
+      {/* 2. Floating PIX Contribution Card (Indicated Red Box Position) */}
+      <PixFloatingCard />
+
+      {/* 3. Main Content Area with macOS Genie transition container */}
       <main className="flex-1 overflow-y-auto relative z-10 custom-scrollbar p-4 lg:p-6 pl-0">
         <div className="max-w-5xl mx-auto h-full flex flex-col items-center">
           
@@ -113,33 +117,40 @@ function App() {
                   </p>
                 </div>
 
-                {/* Search result indicator */}
+                {/* Animated Search Result Indicator */}
                 {searchQuery.trim() && (
-                  <div className="mb-4 text-sm text-gray-400 font-mono text-center">
+                  <div className="mb-4 text-sm text-gray-300 font-mono text-center animate-in fade-in slide-in-from-top-3 duration-300">
                     Encontrado(s) <strong className="text-[var(--color-lime-neon)]">{filteredTopics.length}</strong> módulo(s) para "{searchQuery}"
                   </div>
                 )}
 
-                {/* Interactive macOS Liquid Glass 3D Carousel or Search Grid */}
+                {/* Interactive macOS Liquid Glass 3D Carousel or Animated Search Grid */}
                 {!searchQuery.trim() ? (
-                  <CategoryCarousel 
-                    topics={filteredTopics}
-                    onSelectTopic={handleSelectTopic}
-                  />
+                  <div className="w-full animate-in fade-in zoom-in-95 duration-400">
+                    <CategoryCarousel 
+                      topics={filteredTopics}
+                      onSelectTopic={handleSelectTopic}
+                    />
+                  </div>
                 ) : (
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
-                    {filteredTopics.map(topic => (
-                      <TopicCard 
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full animate-search-grid">
+                    {filteredTopics.map((topic, idx) => (
+                      <div 
                         key={topic.id} 
-                        topic={topic} 
-                        onClick={handleSelectTopic}
-                      />
+                        style={{ animationDelay: `${idx * 60}ms` }}
+                        className="animate-in fade-in slide-in-from-bottom-4 duration-400 fill-mode-backwards"
+                      >
+                        <TopicCard 
+                          topic={topic} 
+                          onClick={handleSelectTopic}
+                        />
+                      </div>
                     ))}
                   </div>
                 )}
               </div>
             ) : (
-              <div className="py-2 w-full">
+              <div className="py-2 w-full animate-in fade-in duration-300">
                 <TopicDetails 
                   topic={selectedTopic} 
                   onBack={handleBackToGrid} 
@@ -152,7 +163,7 @@ function App() {
         </div>
       </main>
 
-      {/* 3. Interactive Playground (iOS Glass Sheet Drawer) */}
+      {/* 4. Interactive Playground (iOS Glass Sheet Drawer) */}
       {testingVuln && (
         <PlaygroundPanel 
           vulnerability={testingVuln}

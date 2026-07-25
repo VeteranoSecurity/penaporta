@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Copy, Check, Terminal, PlayCircle, Target, Download } from 'lucide-react';
+import { Copy, Check, Terminal, PlayCircle, Target, Lock } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import type { Topic, Vulnerability } from '../data/mockData';
 
@@ -20,32 +20,6 @@ export function TopicDetails({
     navigator.clipboard.writeText(payload);
     setCopiedId(id);
     setTimeout(() => setCopiedId(null), 2000);
-  };
-
-  // Generate & Download Markdown Cheatsheet
-  const handleExportCheatsheet = () => {
-    let md = `# Cheatsheet: ${topic.title}\n\n${topic.description}\n\n`;
-    topic.vulnerabilities.forEach((v, index) => {
-      md += `## ${index + 1}. ${v.title} (${v.difficulty || 'Geral'})\n`;
-      md += `**Cenário:** ${v.scenario}\n\n`;
-      md += `\`\`\`bash\n${v.payload}\n\`\`\`\n\n`;
-      if (v.mindset_why) {
-        md += `> **Mindset:** ${v.mindset_why}\n\n`;
-      }
-      md += `---\n\n`;
-    });
-
-    const blob = new Blob([md], { type: 'text/markdown;charset=utf-8;' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.setAttribute('download', `cheatsheet_${topic.id}.md`);
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-
-    setCopiedCheatsheet(true);
-    setTimeout(() => setCopiedCheatsheet(false), 3000);
   };
 
   const getDifficultyBadge = (difficulty?: string) => {
@@ -76,25 +50,19 @@ export function TopicDetails({
   return (
     <div className="max-w-5xl mx-auto w-full space-y-6">
       
-      {/* Action Navigation Bar (Export Cheatsheet) */}
+      {/* Action Navigation Bar (Export Cheatsheet Locked) */}
       <div className="flex items-center justify-end flex-wrap gap-4">
-        {/* Download Cheatsheet Button */}
+        {/* Locked Download Cheatsheet Button with Red Padlock */}
         <button
-          onClick={handleExportCheatsheet}
-          className="glass-button inline-flex items-center text-gray-200 hover:text-white px-4 py-2 rounded-full font-medium text-xs transition-all border border-white/15 hover:border-lime-500/40 shadow-md"
-          title="Baixar todos os payloads em arquivo Markdown"
+          onClick={() => {
+            setCopiedCheatsheet(true);
+            setTimeout(() => setCopiedCheatsheet(false), 2500);
+          }}
+          className="glass-button inline-flex items-center text-rose-300 hover:text-rose-200 px-4 py-2 rounded-full font-medium text-xs transition-all border border-rose-500/40 bg-rose-500/10 hover:bg-rose-500/20 shadow-md cursor-pointer"
+          title="Recurso Bloqueado com Cadeado Vermelho"
         >
-          {copiedCheatsheet ? (
-            <>
-              <Check size={15} className="mr-1.5 text-emerald-400" />
-              Cheatsheet Baixado!
-            </>
-          ) : (
-            <>
-              <Download size={15} className="mr-1.5 text-lime-400" />
-              Exportar Cheatsheet (.md)
-            </>
-          )}
+          <Lock size={15} className="mr-1.5 text-rose-500" />
+          {copiedCheatsheet ? 'Recurso Bloqueado!' : 'Exportar Cheatsheet (.md)'}
         </button>
       </div>
 
@@ -140,7 +108,7 @@ export function TopicDetails({
                 onClick={() => onTest(vuln)}
                 className="glass-button glass-button-lime inline-flex items-center justify-center px-4 py-2 rounded-xl text-xs font-bold text-black transition-all shadow-md self-start sm:self-auto"
               >
-                <PlayCircle size={15} className="mr-1.5" />
+                <PlayCircle size={15} className="mr-1.5 text-black" />
                 Simular no Playground
               </button>
             </div>

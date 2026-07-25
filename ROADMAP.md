@@ -1,11 +1,8 @@
-# 🚀 Roadmap & Próximos Passos - Pé na Porta!
-
-Este arquivo gerencia o progresso das funcionalidades, conteúdos e melhorias da plataforma **Pé na Porta!**.
-
----
+# 🚀 VantaVidro • Security Suite - Roteiro de Desenvolvimento (Roadmap)
 
 ## 📌 Status Atual do Projeto
 
+- [x] **Rebranding VantaVidro & Header Vídeo Futurista**: Atualizado o nome oficial para **VantaVidro**, com vídeo animado em loop (`logo-animada.mp4`) integrado na área de topo do menu lateral.
 - [x] **Correção de Infraestrutura & Build**: Arquivo `src/data/mockData.ts` restaurado e validação do TypeScript sem erros.
 - [x] **Base de Conhecimento Expandida**: 8 Categorias OWASP configuradas com 80 vulnerabilidades técnicas completas (10 por categoria):
   - [x] **SQL Injection** (10 vulnerabilidades)
@@ -46,9 +43,11 @@ Este arquivo gerencia o progresso das funcionalidades, conteúdos e melhorias da
   - [x] Redesenhar a interface com estética inspirada em iOS e conceitos de *Liquid Gel / Glassmorphism* (efeitos translúcidos de vidro, `backdrop-blur`, bordas suaves, cantos super-arredondados `squircle` e micro-interações fluídas).
   - [x] Atualizar tokens visuais (`index.css`) com gradientes líquidos, néon suave e sombras em camadas profundas.
   - [x] Animação de recolher/minimizar estilo macOS Genie (`animate-genie-out` / `animate-genie-in`) aplicada nas transições de categorias.
-- [x] **Carrossel 3D macOS Cover Flow em Vidro**: Exibição das 8 categorias na página inicial através de um carrossel 3D destacado em posição de herói (`w-[410px] h-[390px]`), com navegação por setas em vidro, teclado (setas esquerda/direita) e pílulas de paginação translúcidas.
-- [x] **Navegação Simplificada**: Removido o botão redundante `Voltar para Categorias` do topo dos detalhes, mantendo a navegação unificada pelo botão `Início` em vidro ao lado do campo de busca.
-- [x] **Menu Lateral Vidro Translúcido**: Aplicado o efeito *Liquid Glass* de altíssima definição no menu lateral (`Sidebar`), com iluminação bioluminescente `liquid-orb-sidebar` para garantir a translucidez idêntica aos cards principais.
+- [x] **Carrossel 3D macOS Cover Flow Sem Cortes & Com Clique/Arrasta**: Exibição das 8 categorias na página inicial através de um carrossel 3D destacado, com suporte completo a gestos de **clique e arrasta (drag) do mouse**, touch swipe em telas sensíveis, setas laterais em vidro e suavização de opacidade sem nenhum corte horizontal.
+- [x] **Animações de Transição na Busca**: Adicionados efeitos visuais de fade e elevação suave (`animate-search-grid`, `zoom-in-95`, entrada em cascata por cards) ao iniciar ou apagar pesquisas na barra de busca.
+- [x] **Card PIX Flutuante Liquid Glass**: Criado o componente [`PixFloatingCard.tsx`](file:///c:/Users/jesse/Documents/Trabalho/projetos/penaporta/src/components/PixFloatingCard.tsx) posicionado exatamente no local indicado (flutuando no canto inferior esquerdo ao lado da sidebar), com QR Code (`pix-free.png`), chave oficial PIX Copia e Cola, animações de entrada e opção de minimizar para um botão de apoio.
+- [x] **Favicon V Verde Néon**: Criado o arquivo `public/favicon.svg` exibindo um **V** verde néon estilizado e atualizado no `index.html`.
+- [x] **Menu de Categorias sem Rolagem Horizontal**: Aplicado `overflow-x-hidden` e truncamento de texto flexível no `Sidebar.tsx`, eliminando definitivamente a barra horizontal acima do rodapé.
 - [x] **Filtros por Dificuldade**: Badges dinâmicas por nível (*Iniciante*, *Intermediário*, *Avançado*).
 
 ---
