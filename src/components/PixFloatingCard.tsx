@@ -28,7 +28,7 @@ export function PixFloatingCard() {
   }
 
   return (
-    <div className="fixed bottom-6 left-[315px] z-30 w-64 glass-panel rounded-3xl p-4 border border-lime-500/40 backdrop-blur-2xl shadow-[0_25px_60px_rgba(0,0,0,0.85)] animate-in slide-in-from-bottom-6 duration-400 select-none group">
+    <div className="fixed bottom-6 left-[310px] z-30 w-64 glass-panel rounded-3xl p-4 border border-lime-500/40 backdrop-blur-2xl shadow-[0_25px_60px_rgba(0,0,0,0.85)] animate-in slide-in-from-bottom-6 duration-400 select-none group">
 
       {/* Background Liquid Ambient Glow */}
       <div className="absolute -top-10 left-1/2 -translate-x-1/2 w-40 h-40 bg-lime-500/20 rounded-full blur-2xl pointer-events-none group-hover:bg-lime-500/30 transition-all duration-500"></div>

@@ -81,7 +81,7 @@ export function CategoryCarousel({ topics, onSelectTopic }: CategoryCarouselProp
 
   return (
     <div className="w-full flex flex-col items-center relative py-4 select-none">
-
+      
       {/* Header Pill Tag */}
       <div className="flex items-center space-x-2 mb-4">
         <span className="px-4 py-1.5 text-xs font-semibold uppercase tracking-widest rounded-full bg-lime-500/15 text-[var(--color-lime-neon)] border border-lime-500/30 backdrop-blur-xl font-mono flex items-center gap-2 shadow-[0_0_20px_rgba(57,255,20,0.15)]">
@@ -91,7 +91,7 @@ export function CategoryCarousel({ topics, onSelectTopic }: CategoryCarouselProp
       </div>
 
       {/* Prominent 3D Glass Carousel Stage (Hero Cards without Clipping or Stretching) */}
-      <div
+      <div 
         onMouseDown={(e) => handleDragStart(e.clientX)}
         onMouseMove={(e) => handleDragMove(e.clientX)}
         onMouseUp={handleDragEnd}
@@ -101,7 +101,7 @@ export function CategoryCarousel({ topics, onSelectTopic }: CategoryCarouselProp
         onTouchEnd={handleDragEnd}
         className="relative w-full max-w-6xl h-[470px] flex items-center justify-center perspective-1000 overflow-visible cursor-grab active:cursor-grabbing px-4"
       >
-
+        
         {/* Navigation Buttons (Left & Right Glass Circles) */}
         <button
           onClick={handlePrev}
@@ -138,7 +138,7 @@ export function CategoryCarousel({ topics, onSelectTopic }: CategoryCarouselProp
             const rotateY = offset * -20;
             const scale = isActive ? 1.08 : Math.max(0.72, 1 - Math.abs(offset) * 0.18);
             const zIndex = 30 - Math.abs(offset) * 5;
-
+            
             // Fades out gracefully so no card appears cropped/clipped
             const opacity = Math.abs(offset) >= 2 ? 0 : Math.max(0.4, 1 - Math.abs(offset) * 0.45);
 
@@ -160,10 +160,11 @@ export function CategoryCarousel({ topics, onSelectTopic }: CategoryCarouselProp
                   opacity,
                   transition: 'all 0.45s cubic-bezier(0.16, 1, 0.3, 1)'
                 }}
-                className={`absolute w-[320px] md:w-[380px] h-[390px] glass-panel rounded-3xl p-7 flex flex-col justify-between items-center text-center cursor-pointer border transition-all duration-400 ${isActive
-                    ? 'border-lime-500/60 shadow-[0_25px_70px_rgba(57,255,20,0.3)] bg-gradient-to-b from-white/15 via-white/5 to-lime-500/15 backdrop-blur-2xl'
+                className={`absolute w-[320px] md:w-[380px] h-[390px] glass-panel rounded-3xl p-7 flex flex-col justify-between items-center text-center cursor-pointer border transition-all duration-400 ${
+                  isActive 
+                    ? 'border-lime-500/60 shadow-[0_25px_70px_rgba(57,255,20,0.3)] bg-gradient-to-b from-white/8 via-white/2 to-lime-500/8 backdrop-blur-2xl' 
                     : 'border-white/20 shadow-[0_10px_40px_rgba(0,0,0,0.6)] hover:border-white/40 backdrop-blur-xl'
-                  }`}
+                }`}
               >
                 {/* Specular Liquid Ambient Glow */}
                 {isActive && (
@@ -171,10 +172,11 @@ export function CategoryCarousel({ topics, onSelectTopic }: CategoryCarouselProp
                 )}
 
                 <div className="flex flex-col items-center w-full relative z-10">
-                  <div className={`p-4 rounded-3xl mb-4 glass-panel border transition-all duration-300 ${isActive
-                      ? 'bg-lime-500/20 border-lime-500/50 shadow-[0_0_30px_rgba(57,255,20,0.35)]'
+                  <div className={`p-4 rounded-3xl mb-4 glass-panel border transition-all duration-300 ${
+                    isActive 
+                      ? 'bg-lime-500/15 border-lime-500/50 shadow-[0_0_30px_rgba(57,255,20,0.35)]' 
                       : 'bg-white/5 border-white/10'
-                    }`}>
+                  }`}>
                     {iconMap[topic.icon] || <Terminal size={48} className="text-[var(--color-lime-neon)]" />}
                   </div>
 
@@ -185,8 +187,8 @@ export function CategoryCarousel({ topics, onSelectTopic }: CategoryCarouselProp
                   <h3 className="text-2xl md:text-3xl font-extrabold text-white mb-2 tracking-tight text-center drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
                     {topic.title}
                   </h3>
-
-                  <p className="text-gray-200 text-xs md:text-sm leading-relaxed text-center line-clamp-3">
+                  
+                  <p className="text-gray-200 text-xs md:text-sm leading-relaxed text-center line-clamp-3 font-normal">
                     {topic.description}
                   </p>
                 </div>
@@ -210,10 +212,11 @@ export function CategoryCarousel({ topics, onSelectTopic }: CategoryCarouselProp
           <button
             key={topic.id}
             onClick={() => setActiveIndex(idx)}
-            className={`transition-all duration-300 rounded-full ${idx === activeIndex
-                ? 'w-7 h-2.5 bg-[var(--color-lime-neon)] shadow-[0_0_12px_rgba(57,255,20,0.8)]'
+            className={`transition-all duration-300 rounded-full ${
+              idx === activeIndex 
+                ? 'w-7 h-2.5 bg-[var(--color-lime-neon)] shadow-[0_0_12px_rgba(57,255,20,0.8)]' 
                 : 'w-2.5 h-2.5 bg-white/20 hover:bg-white/40'
-              }`}
+            }`}
             title={topic.title}
           />
         ))}
